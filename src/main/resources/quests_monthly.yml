@@ -1,0 +1,13 @@
+# Definicje misji miesięcznych
+
+'netherite_miner':
+  name: "&5Piekielny Górnik"
+  type: DESTROY
+  blocks:
+    - ANCIENT_DEBRIS
+  amount: 128
+  lore:
+    - "&7Zdobądź 128 Starożytnych Złomów."
+  rewards:
+    - "eco give %player% 50000"
+    - "give %player% netherite_ingot 16"

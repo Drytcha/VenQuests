@@ -1,0 +1,49 @@
+# Główny plik konfiguracyjny - config.yml
+# Tutaj znajdziesz wszystkie ogólne ustawienia pluginu.
+
+database:
+  # Typ bazy danych. Dostępne opcje: SQLITE, MYSQL (MySQL w przyszłości)
+  type: SQLITE
+  # Ustawienia dla MySQL (jeśli type: MYSQL)
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "venquests"
+    username: "root"
+    password: "password"
+
+# Ustawienia menu graficznego (GUI)
+gui:
+  main_menu:
+    title: "&8» &6Centrum Zadań &8«"
+    size: 27 # Wielkość ekwipunku (musi być wielokrotnością 9)
+  daily_quests_menu:
+    title: "&8» &eTwoje Misje Dzienne &8«"
+    size: 45
+  weekly_quests_menu:
+    title: "&8» &bTwoje Misje Tygodniowe &8«"
+    size: 45
+  monthly_quests_menu:
+    title: "&8» &cTwoje Misje Miesięczne &8«"
+    size: 45
+
+# Ustawienia dotyczące kupowania dodatkowych misji
+buy_quest:
+  daily:
+    enabled: true
+    cost: 500.0 # Wymaga Vault
+  weekly:
+    enabled: true
+    cost: 2500.0
+  monthly:
+    enabled: false
+    cost: 10000.0
+
+# Cooldowny (w sekundach)
+# Dzienny: 24 * 60 * 60 = 86400
+# Tygodniowy: 7 * 86400 = 604800
+# Miesięczny: 30 * 86400 = 2592000
+cooldowns:
+  daily: 86400
+  weekly: 604800
+  monthly: 2592000

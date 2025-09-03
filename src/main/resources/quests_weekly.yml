@@ -1,0 +1,15 @@
+# Definicje misji tygodniowych
+
+'wither_hunter':
+  name: "&8Łowca Mroku"
+  type: MOBS
+  mobs:
+    - WITHER
+  amount: 3
+  lore:
+    - "&7Pokonaj 3 Withery,"
+    - "&7aby udowodnić swoją siłę."
+  rewards:
+    - "eco give %player% 10000"
+    - "give %player% nether_star 1"
+    - "broadcast &6Gracz &e%player% &6ukończył tygodniową misję Łowcy Mroku!"

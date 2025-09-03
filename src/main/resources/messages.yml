@@ -1,0 +1,22 @@
+# Plik z wiadomościami pluginu. Możesz edytować każdą wiadomość.
+# Używaj kodów kolorów z '&'.
+
+prefix: "&8[&6VenQuests&8] &r"
+
+# Ogólne
+no_permission: "&cNie masz uprawnień do użycia tej komendy."
+player_only_command: "&cTa komenda może być wykonana tylko przez gracza."
+reload_success: "&aKonfiguracja pluginu została przeładowana."
+
+# Misje
+new_quest_assigned: "&aOtrzymałeś nową misję dzienną: &e%quest_name%&a!"
+quest_completed: "&aGratulacje! Ukończyłeś misję &e%quest_name%&a i otrzymałeś nagrody!"
+quest_progress: "&7Postęp: &e%progress%&7/&e%goal%"
+on_cooldown: "&cMożesz wylosować nową misję za: &e%time%"
+buy_quest_success: "&aPomyślnie zakupiono nową misję!"
+not_enough_money: "&cNie masz wystarczająco pieniędzy, aby kupić nową misję. Koszt: &e%cost%$"
+
+# Resetowanie
+reset_usage: "&cPoprawne użycie: /venquests reset <gracz> <daily|weekly|monthly|all>"
+player_not_found: "&cNie znaleziono gracza o nicku %player%."
+reset_success: "&aPomyślnie zresetowano misje (%type%) dla gracza %player%."

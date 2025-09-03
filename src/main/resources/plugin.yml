@@ -1,0 +1,24 @@
+name: VenQuests
+version: 1.0.0
+main: pl.drytcha.venquests.VenQuests
+api-version: '1.21'
+author: Drytcha
+description: Zaawansowany plugin na misje dzienne, tygodniowe i miesięczne.
+depend: [Vault]
+softdepend: [PlaceholderAPI]
+
+commands:
+  misje:
+    description: Otwiera główne menu misji.
+    aliases: [zadania, quests]
+  venquests:
+    description: Główna komenda administracyjna dla VenQuests.
+    aliases: [vq, questadmin]
+
+permissions:
+  venquests.player.use:
+    description: Pozwala na otwieranie menu misji i wykonywanie zadań.
+    default: true
+  venquests.admin:
+    description: Dostęp do wszystkich komend administracyjnych pluginu.
+    default: op

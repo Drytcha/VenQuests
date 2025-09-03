@@ -1,0 +1,39 @@
+# Definicje misji dziennych. Możesz dodać ich nielimitowaną ilość.
+# Każda misja musi mieć unikalny klucz (np. '1', '2', 'zombie_slayer').
+# Typy misji: MOBS, DESTROY, CRAFTING
+
+'1':
+  name: "&cKrwawy Księżyc"
+  type: MOBS
+  mobs:
+    - ZOMBIE
+  amount: 200
+  lore:
+    - "&7Zabij 200 Zombie,"
+    - "&7aby oczyścić okolicę."
+  rewards:
+    - "eco give %player% 500"
+    - "tell %player% &aGratulacje! Ukończyłeś misję Krwawy Księżyc!"
+
+'2':
+  name: "&bGórnik Diamentów"
+  type: DESTROY
+  blocks:
+    - DIAMOND_ORE
+    - DEEPSLATE_DIAMOND_ORE
+  amount: 64
+  lore:
+    - "&7Wykop 64 rudy diamentu."
+  rewards:
+    - "eco give %player% 1000"
+    - "give %player% diamond 10"
+
+'3':
+  name: "&eMistrz Rzemiosła"
+  type: CRAFTING
+  item: DIAMOND_PICKAXE
+  amount: 1
+  lore:
+    - "&7Stwórz diamentowy kilof."
+  rewards:
+    - "xp give %player% 100L"
