@@ -62,7 +62,9 @@ public class SQLiteManager implements DatabaseManager {
                 "monthly_cooldown BIGINT DEFAULT 0," +
                 "additional_daily_quests TEXT," +
                 "additional_weekly_quests TEXT," +
-                "additional_monthly_quests TEXT" +
+                "additional_monthly_quests TEXT," +
+                "daily_quests_bought INTEGER DEFAULT 0," +
+                "last_daily_buy_timestamp BIGINT DEFAULT 0" +
                 ");";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.execute();
@@ -94,6 +96,9 @@ public class SQLiteManager implements DatabaseManager {
                 data.setAdditionalWeeklyQuests(gson.fromJson(rs.getString("additional_weekly_quests"), progressListType));
                 data.setAdditionalMonthlyQuests(gson.fromJson(rs.getString("additional_monthly_quests"), progressListType));
 
+                data.setDailyQuestsBought(rs.getInt("daily_quests_bought"));
+                data.setLastDailyBuyTimestamp(rs.getLong("last_daily_buy_timestamp"));
+
                 return data;
             }
         } catch (SQLException e) {
@@ -104,15 +109,17 @@ public class SQLiteManager implements DatabaseManager {
 
     @Override
     public void savePlayerData(PlayerData playerData) {
-        String query = "INSERT INTO player_quests (uuid, daily_quest, daily_cooldown, weekly_quest, weekly_cooldown, monthly_quest, monthly_cooldown, additional_daily_quests, additional_weekly_quests, additional_monthly_quests) " +
-                "VALUES(?,?,?,?,?,?,?,?,?,?) " +
+        String query = "INSERT INTO player_quests (uuid, daily_quest, daily_cooldown, weekly_quest, weekly_cooldown, monthly_quest, monthly_cooldown, additional_daily_quests, additional_weekly_quests, additional_monthly_quests, daily_quests_bought, last_daily_buy_timestamp) " +
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) " +
                 "ON CONFLICT(uuid) DO UPDATE SET " +
                 "daily_quest=excluded.daily_quest, daily_cooldown=excluded.daily_cooldown, " +
                 "weekly_quest=excluded.weekly_quest, weekly_cooldown=excluded.weekly_cooldown, " +
                 "monthly_quest=excluded.monthly_quest, monthly_cooldown=excluded.monthly_cooldown, " +
                 "additional_daily_quests=excluded.additional_daily_quests, " +
                 "additional_weekly_quests=excluded.additional_weekly_quests, " +
-                "additional_monthly_quests=excluded.additional_monthly_quests;";
+                "additional_monthly_quests=excluded.additional_monthly_quests, " +
+                "daily_quests_bought=excluded.daily_quests_bought, " +
+                "last_daily_buy_timestamp=excluded.last_daily_buy_timestamp;";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, playerData.getUuid().toString());
@@ -125,6 +132,8 @@ public class SQLiteManager implements DatabaseManager {
             statement.setString(8, gson.toJson(playerData.getAdditionalDailyQuests()));
             statement.setString(9, gson.toJson(playerData.getAdditionalWeeklyQuests()));
             statement.setString(10, gson.toJson(playerData.getAdditionalMonthlyQuests()));
+            statement.setInt(11, playerData.getDailyQuestsBought());
+            statement.setLong(12, playerData.getLastDailyBuyTimestamp());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,6 +148,8 @@ public class SQLiteManager implements DatabaseManager {
                 data.setDailyQuest(null);
                 data.setDailyCooldown(0);
                 data.getAdditionalDailyQuests().clear();
+                data.setDailyQuestsBought(0);
+                data.setLastDailyBuyTimestamp(0);
                 break;
             case "weekly":
                 data.setWeeklyQuest(null);
@@ -154,6 +165,8 @@ public class SQLiteManager implements DatabaseManager {
                 data.setDailyQuest(null);
                 data.setDailyCooldown(0);
                 data.getAdditionalDailyQuests().clear();
+                data.setDailyQuestsBought(0);
+                data.setLastDailyBuyTimestamp(0);
                 data.setWeeklyQuest(null);
                 data.setWeeklyCooldown(0);
                 data.getAdditionalWeeklyQuests().clear();

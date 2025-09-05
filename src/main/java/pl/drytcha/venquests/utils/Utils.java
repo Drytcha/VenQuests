@@ -25,7 +25,7 @@ public class Utils {
         if (messagesConfig == null) {
             loadMessages(VenQuests.getInstance());
         }
-        String message = messagesConfig.getString("prefix", "&8[&6VenQuests&8] &r") + messagesConfig.getString(path, "&cMessage not found: " + path);
+        String message = messagesConfig.getString(path, "&cMessage not found: " + path);
         return colorize(message);
     }
 
@@ -40,6 +40,9 @@ public class Utils {
     }
 
     public static String formatTime(long millis) {
+        if (millis <= 0) {
+            return "0s";
+        }
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
         long days = TimeUnit.SECONDS.toDays(seconds);
         seconds -= TimeUnit.DAYS.toSeconds(days);
@@ -52,7 +55,7 @@ public class Utils {
         if (days > 0) sb.append(days).append("d ");
         if (hours > 0) sb.append(hours).append("h ");
         if (minutes > 0) sb.append(minutes).append("m ");
-        sb.append(seconds).append("s");
+        if (seconds > 0 || sb.length() == 0) sb.append(seconds).append("s");
 
         return sb.toString().trim();
     }

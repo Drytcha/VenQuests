@@ -4,6 +4,7 @@ import pl.drytcha.venquests.VenQuests;
 import pl.drytcha.venquests.config.QuestType;
 import pl.drytcha.venquests.database.PlayerProgress;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,9 @@ public class PlayerData {
     private List<PlayerProgress> additionalDailyQuests = new ArrayList<>();
     private List<PlayerProgress> additionalWeeklyQuests = new ArrayList<>();
     private List<PlayerProgress> additionalMonthlyQuests = new ArrayList<>();
+
+    private int dailyQuestsBought;
+    private long lastDailyBuyTimestamp;
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
@@ -69,15 +73,15 @@ public class PlayerData {
     public void removeQuest(QuestType.Category category, PlayerProgress progress) {
         switch (category) {
             case DAILY:
-                if (dailyQuest == progress) dailyQuest = null;
+                if (dailyQuest != null && dailyQuest.getQuestId().equals(progress.getQuestId())) dailyQuest = null;
                 else getAdditionalDailyQuests().remove(progress);
                 break;
             case WEEKLY:
-                if (weeklyQuest == progress) weeklyQuest = null;
+                if (weeklyQuest != null && weeklyQuest.getQuestId().equals(progress.getQuestId())) weeklyQuest = null;
                 else getAdditionalWeeklyQuests().remove(progress);
                 break;
             case MONTHLY:
-                if (monthlyQuest == progress) monthlyQuest = null;
+                if (monthlyQuest != null && monthlyQuest.getQuestId().equals(progress.getQuestId())) monthlyQuest = null;
                 else getAdditionalMonthlyQuests().remove(progress);
                 break;
         }
@@ -109,8 +113,44 @@ public class PlayerData {
     }
 
     public boolean isMainQuest(QuestType.Category category, PlayerProgress progress) {
-        return getMainQuest(category) == progress;
+        PlayerProgress main = getMainQuest(category);
+        return main != null && main.getQuestId().equals(progress.getQuestId());
     }
+
+    public boolean canBuyQuest(QuestType.Category category) {
+        int limit = VenQuests.getInstance().getConfig().getInt("buy_quest." + category.name().toLowerCase() + ".limit", 99);
+        if (!isSameDay(lastDailyBuyTimestamp, System.currentTimeMillis())) {
+            dailyQuestsBought = 0;
+        }
+        int boughtAmount = 0;
+        switch(category) {
+            case DAILY: boughtAmount = dailyQuestsBought; break;
+            // Tutaj można dodać logikę dla Tygodniowych/Miesięcznych limitów
+        }
+        return boughtAmount < limit;
+    }
+
+    public void incrementQuestsBought(QuestType.Category category) {
+        if (category == QuestType.Category.DAILY) {
+            if (!isSameDay(lastDailyBuyTimestamp, System.currentTimeMillis())) {
+                dailyQuestsBought = 0;
+            }
+            this.dailyQuestsBought++;
+            this.lastDailyBuyTimestamp = System.currentTimeMillis();
+        }
+        // Tutaj można dodać logikę dla Tygodniowych/Miesięcznych limitów
+    }
+
+    private boolean isSameDay(long time1, long time2) {
+        if (time1 == 0) return false;
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(time1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTimeInMillis(time2);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
 
     // Standardowe Gettery i Settery
     public UUID getUuid() { return uuid; }
@@ -132,5 +172,9 @@ public class PlayerData {
     public void setAdditionalWeeklyQuests(List<PlayerProgress> quests) { this.additionalWeeklyQuests = quests; }
     public List<PlayerProgress> getAdditionalMonthlyQuests() { if(additionalMonthlyQuests == null) additionalMonthlyQuests = new ArrayList<>(); return additionalMonthlyQuests; }
     public void setAdditionalMonthlyQuests(List<PlayerProgress> quests) { this.additionalMonthlyQuests = quests; }
+    public int getDailyQuestsBought() { return dailyQuestsBought; }
+    public void setDailyQuestsBought(int dailyQuestsBought) { this.dailyQuestsBought = dailyQuestsBought; }
+    public long getLastDailyBuyTimestamp() { return lastDailyBuyTimestamp; }
+    public void setLastDailyBuyTimestamp(long lastDailyBuyTimestamp) { this.lastDailyBuyTimestamp = lastDailyBuyTimestamp; }
 }
 

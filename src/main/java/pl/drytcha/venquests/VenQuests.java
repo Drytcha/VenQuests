@@ -3,6 +3,7 @@ package pl.drytcha.venquests;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import pl.drytcha.venquests.commands.CommandManager;
 import pl.drytcha.venquests.config.QuestManager;
 import pl.drytcha.venquests.database.DatabaseManager;
@@ -14,7 +15,10 @@ import pl.drytcha.venquests.player.PlayerManager;
 import pl.drytcha.venquests.utils.EconomyManager;
 import pl.drytcha.venquests.utils.Utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class VenQuests extends JavaPlugin {
 
@@ -25,6 +29,8 @@ public final class VenQuests extends JavaPlugin {
     private EconomyManager economyManager;
     private GUI gui;
     private Economy vaultEconomy = null;
+    private final Map<UUID, BukkitTask> guiUpdateTasks = new HashMap<>();
+
 
     @Override
     public void onEnable() {
@@ -36,11 +42,12 @@ public final class VenQuests extends JavaPlugin {
         saveResource("quests_daily.yml", false);
         saveResource("quests_weekly.yml", false);
         saveResource("quests_monthly.yml", false);
+        Utils.loadMessages(this);
 
         // Inicjalizacja managerów
         this.playerManager = new PlayerManager();
         this.questManager = new QuestManager(this);
-        this.questManager.loadQuests(); // Ładujemy misje
+        this.questManager.loadQuests();
 
         // Inicjalizacja bazy danych
         if (Objects.requireNonNull(getConfig().getString("database.type")).equalsIgnoreCase("SQLITE")) {
@@ -65,18 +72,15 @@ public final class VenQuests extends JavaPlugin {
         registerCommands();
         registerListeners();
 
-        // Inicjalizacja PlaceholderAPI
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            // new QuestPlaceholders(this).register();
-            getLogger().info("Zarejestrowano placeholdery dla PlaceholderAPI.");
-        }
-
-
         getLogger().info("Plugin VenQuests został pomyślnie włączony!");
     }
 
     @Override
     public void onDisable() {
+        // Anuluj wszystkie działające zadania odświeżania GUI
+        guiUpdateTasks.values().forEach(BukkitTask::cancel);
+        guiUpdateTasks.clear();
+
         if (databaseManager != null) {
             databaseManager.close();
         }
@@ -131,6 +135,10 @@ public final class VenQuests extends JavaPlugin {
 
     public EconomyManager getEconomyManager() {
         return economyManager;
+    }
+
+    public Map<UUID, BukkitTask> getGuiUpdateTasks() {
+        return guiUpdateTasks;
     }
 }
 

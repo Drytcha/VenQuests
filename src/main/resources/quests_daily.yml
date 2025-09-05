@@ -1,7 +1,6 @@
-# Definicje misji dziennych. Możesz dodać ich nielimitowaną ilość.
-# Każda misja musi mieć unikalny klucz (np. '1', '2', 'zombie_slayer').
-# Typy misji: MOBS, DESTROY, CRAFTING
-
+#  Definicje misji dziennych. Możesz dodać ich nielimitowaną ilość.
+#    Każda misja musi mieć unikalny klucz (np. '1', '2', 'zombie_slayer').
+#  Typy misji: MOBS, DESTROY, CRAFTING, COLLECT, PLACE, ENCHANT, ENCHANT_ITEM, EATING, FARMING, TRADE_VILLAGER, TRADE_PIGLIN
 '1':
   name: "&cKrwawy Księżyc"
   type: MOBS
@@ -36,4 +35,72 @@
   lore:
     - "&7Stwórz diamentowy kilof."
   rewards:
-    - "xp give %player% 100L"
+    - "eco give %player% 2000"
+
+'4':
+  name: "&aPoszukiwacz Węgla"
+  type: COLLECT
+  item: COAL
+  amount: 256
+  lore:
+    - "&7Zbierz 256 węgla. Możesz go wykopać lub"
+    - "&7znaleźć w skrzyniach."
+  rewards:
+    - "eco give %player% 400"
+
+'5':
+  name: "&9Kamieniarz"
+  type: PLACE
+  item: COBBLESTONE
+  amount: 512
+  lore:
+    - "&7Ustaw 512 bloków bruku."
+  rewards:
+    - "eco give %player% 350"
+
+'6':
+  name: "&dZaklinacz"
+  type: ENCHANT
+  enchant: PROTECTION
+  enchantLevel: 4
+  amount: 1
+  lore:
+    - "&7Zaczaruj dowolny przedmiot zaklęciem Protection 4."
+  rewards:
+    - "eco give %player% 5000"
+    - "give %player% diamond_block 1"
+
+'7':
+  name: "&dMistrz Ostrzy"
+  type: ENCHANT_ITEM
+  item: DIAMOND_SWORD
+  enchant: SHARPNESS
+  enchantLevel: 5
+  amount: 1
+  lore:
+    - "&7Zaczaruj diamentowy miecz zaklęciem Sharpness 5."
+  rewards:
+    - "eco give %player% 7500"
+
+'8':
+  name: "&2Wiecznie Głodny"
+  type: EATING
+  eatenItem: GOLDEN_CARROT
+  amount: 10
+  lore:
+    - "&7Zjedz 10 Złotych Marchewek."
+  rewards:
+    - "eco give %player% 1500"
+    - "give %player% golden_apple 5"
+
+'9':
+  name: "&6Żniwiarz Pszenicy"
+  type: FARMING
+  farmedItems:
+    - WHEAT
+  amount: 128
+  lore:
+    - "&7Zbierz 128 pszenicy, aby wesprzeć osadę."
+  rewards:
+    - "eco give %player% 300"
+    - "give %player% bread 64"
