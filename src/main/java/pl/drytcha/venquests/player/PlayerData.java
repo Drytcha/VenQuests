@@ -97,18 +97,30 @@ public class PlayerData {
     }
 
     public void removeQuest(QuestType.Category category, PlayerProgress progress) {
+        if (progress == null || progress.getQuestId() == null) {
+            return;
+        }
         switch (category) {
             case DAILY:
-                if (dailyQuest != null && dailyQuest.getQuestId().equals(progress.getQuestId())) dailyQuest = null;
-                else getAdditionalDailyQuests().remove(progress);
+                if (dailyQuest != null && progress.getQuestId().equals(dailyQuest.getQuestId())) {
+                    dailyQuest = null;
+                } else {
+                    getAdditionalDailyQuests().removeIf(p -> p != null && progress.getQuestId().equals(p.getQuestId()));
+                }
                 break;
             case WEEKLY:
-                if (weeklyQuest != null && weeklyQuest.getQuestId().equals(progress.getQuestId())) weeklyQuest = null;
-                else getAdditionalWeeklyQuests().remove(progress);
+                if (weeklyQuest != null && progress.getQuestId().equals(weeklyQuest.getQuestId())) {
+                    weeklyQuest = null;
+                } else {
+                    getAdditionalWeeklyQuests().removeIf(p -> p != null && progress.getQuestId().equals(p.getQuestId()));
+                }
                 break;
             case MONTHLY:
-                if (monthlyQuest != null && monthlyQuest.getQuestId().equals(progress.getQuestId())) monthlyQuest = null;
-                else getAdditionalMonthlyQuests().remove(progress);
+                if (monthlyQuest != null && progress.getQuestId().equals(monthlyQuest.getQuestId())) {
+                    monthlyQuest = null;
+                } else {
+                    getAdditionalMonthlyQuests().removeIf(p -> p != null && progress.getQuestId().equals(p.getQuestId()));
+                }
                 break;
         }
     }
@@ -143,16 +155,19 @@ public class PlayerData {
         return main != null && main.getQuestId().equals(progress.getQuestId());
     }
 
-    public boolean canBuyQuest(QuestType.Category category) {
-        int limit = VenQuests.getInstance().getConfig().getInt("buy_quest." + category.name().toLowerCase() + ".limit", 99);
+    public int getDailyQuestsBoughtToday() {
         if (!isSameDay(lastDailyBuyTimestamp, System.currentTimeMillis())) {
-            dailyQuestsBought = 0;
+            return 0;
         }
-        int boughtAmount = 0;
-        switch(category) {
-            case DAILY: boughtAmount = dailyQuestsBought; break;
+        return dailyQuestsBought;
+    }
+
+    public boolean canBuyQuest(QuestType.Category category) {
+        if (category != QuestType.Category.DAILY) {
+            return true; // Na razie limit jest tylko dla dziennych
         }
-        return boughtAmount < limit;
+        int limit = VenQuests.getInstance().getConfig().getInt("buy_quest.daily.limit", 99);
+        return getDailyQuestsBoughtToday() < limit;
     }
 
     public void incrementQuestsBought(QuestType.Category category) {

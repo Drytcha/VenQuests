@@ -9,7 +9,6 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class SQLiteManager implements DatabaseManager {
@@ -147,32 +146,32 @@ public class SQLiteManager implements DatabaseManager {
             case "daily":
                 data.setDailyQuest(null);
                 data.setDailyCooldown(0);
-                data.getAdditionalDailyQuests().clear();
+                if (data.getAdditionalDailyQuests() != null) data.getAdditionalDailyQuests().clear();
                 data.setDailyQuestsBought(0);
                 data.setLastDailyBuyTimestamp(0);
                 break;
             case "weekly":
                 data.setWeeklyQuest(null);
                 data.setWeeklyCooldown(0);
-                data.getAdditionalWeeklyQuests().clear();
+                if (data.getAdditionalWeeklyQuests() != null) data.getAdditionalWeeklyQuests().clear();
                 break;
             case "monthly":
                 data.setMonthlyQuest(null);
                 data.setMonthlyCooldown(0);
-                data.getAdditionalMonthlyQuests().clear();
+                if (data.getAdditionalMonthlyQuests() != null) data.getAdditionalMonthlyQuests().clear();
                 break;
             case "all":
                 data.setDailyQuest(null);
                 data.setDailyCooldown(0);
-                data.getAdditionalDailyQuests().clear();
+                if (data.getAdditionalDailyQuests() != null) data.getAdditionalDailyQuests().clear();
                 data.setDailyQuestsBought(0);
                 data.setLastDailyBuyTimestamp(0);
                 data.setWeeklyQuest(null);
                 data.setWeeklyCooldown(0);
-                data.getAdditionalWeeklyQuests().clear();
+                if (data.getAdditionalWeeklyQuests() != null) data.getAdditionalWeeklyQuests().clear();
                 data.setMonthlyQuest(null);
                 data.setMonthlyCooldown(0);
-                data.getAdditionalMonthlyQuests().clear();
+                if (data.getAdditionalMonthlyQuests() != null) data.getAdditionalMonthlyQuests().clear();
                 break;
         }
         savePlayerData(data);
