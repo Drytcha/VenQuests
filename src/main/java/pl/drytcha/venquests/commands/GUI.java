@@ -1,7 +1,8 @@
-package pl.drytcha.venquests.gui;
+package pl.drytcha.venquests.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,7 @@ import pl.drytcha.venquests.config.Quest;
 import pl.drytcha.venquests.config.QuestType;
 import pl.drytcha.venquests.database.PlayerProgress;
 import pl.drytcha.venquests.player.PlayerData;
+import pl.drytcha.venquests.utils.InventoryUtils;
 import pl.drytcha.venquests.utils.Utils;
 
 import java.util.ArrayList;
@@ -135,8 +137,34 @@ public class GUI implements Listener {
             if (quest != null) {
                 List<String> lore = new ArrayList<>(Utils.colorize(quest.getLore()));
                 lore.add("");
+
+                int currentProgress = progress.getProgress();
+                if (isMovementQuest(quest.getType())) {
+                    int currentStat = 0;
+                    if(quest.getType() == QuestType.WALK) {
+                        currentStat = getTotalWalkStatistic(player);
+                    } else if(quest.getType() == QuestType.SWIM) {
+                        currentStat = player.getStatistic(Statistic.SWIM_ONE_CM);
+                    } else if(quest.getType() == QuestType.GLIDING) {
+                        currentStat = player.getStatistic(Statistic.AVIATE_ONE_CM);
+                    }
+                    currentProgress = (currentStat - progress.getStartValue()) / 100;
+                } else if (quest.getType() == QuestType.COLLECT) {
+                    try {
+                        List<String> requiredItems = quest.getItems();
+                        int totalItems = 0;
+                        for(String itemName : requiredItems) {
+                            Material itemMaterial = Material.valueOf(itemName.toUpperCase());
+                            totalItems += InventoryUtils.getItemCount(player, itemMaterial);
+                        }
+                        currentProgress = totalItems;
+                    } catch (IllegalArgumentException e) {
+                        // Błąd w nazwie materiału, postęp pozostaje 0
+                    }
+                }
+
                 lore.add(Utils.getMessage("quest_progress")
-                        .replace("%progress%", String.valueOf(progress.getProgress()))
+                        .replace("%progress%", String.valueOf(currentProgress))
                         .replace("%goal%", String.valueOf(quest.getAmount())));
 
                 long timeLimitSeconds = plugin.getConfig().getLong("time_limits." + category.name().toLowerCase());
@@ -253,7 +281,8 @@ public class GUI implements Listener {
                 plugin.getEconomyManager().giveCost(player, category);
                 return;
             }
-            playerData.addAdditionalQuest(category, newQuest.getId());
+            PlayerProgress progress = playerData.addAdditionalQuest(category, newQuest.getId());
+            setInitialStatistic(player, newQuest, progress);
             playerData.incrementQuestsBought(category);
 
             player.sendMessage(Utils.getMessage("buy_quest_success"));
@@ -291,12 +320,38 @@ public class GUI implements Listener {
                     player.sendMessage(Utils.colorize("&cNie znaleziono żadnych dostępnych misji w tej kategorii."));
                     return;
                 }
-                playerData.setMainQuest(category, newQuest.getId());
+                PlayerProgress progress = playerData.setMainQuest(category, newQuest.getId());
+                setInitialStatistic(player, newQuest, progress);
                 player.sendMessage(Utils.getMessage("new_quest_assigned").replace("%quest_name%", Utils.colorize(newQuest.getName())));
                 openCategoryMenu(player, category);
             }
         }
     }
+
+    private void setInitialStatistic(Player player, Quest quest, PlayerProgress progress) {
+        if (isMovementQuest(quest.getType())) {
+            int initialStat = 0;
+            if(quest.getType() == QuestType.WALK) {
+                initialStat = getTotalWalkStatistic(player);
+            } else if (quest.getType() == QuestType.SWIM) {
+                initialStat = player.getStatistic(Statistic.SWIM_ONE_CM);
+            } else if (quest.getType() == QuestType.GLIDING) {
+                initialStat = player.getStatistic(Statistic.AVIATE_ONE_CM);
+            }
+            progress.setStartValue(initialStat);
+        }
+    }
+
+    private boolean isMovementQuest(QuestType type) {
+        return type == QuestType.WALK || type == QuestType.SWIM || type == QuestType.GLIDING;
+    }
+
+    private int getTotalWalkStatistic(Player player) {
+        return player.getStatistic(Statistic.WALK_ONE_CM) +
+                player.getStatistic(Statistic.CROUCH_ONE_CM) +
+                player.getStatistic(Statistic.SPRINT_ONE_CM);
+    }
+
 
     private ItemStack createGuiItem(Material material, String name, List<String> lore) {
         ItemStack item = new ItemStack(material, 1);

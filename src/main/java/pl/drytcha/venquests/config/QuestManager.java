@@ -1,6 +1,5 @@
 package pl.drytcha.venquests.config;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.drytcha.venquests.VenQuests;
@@ -43,31 +42,37 @@ public class QuestManager {
             int amount = config.getInt(path + "amount");
             List<String> rewards = config.getStringList(path + "rewards");
             List<String> lore = config.getStringList(path + "lore");
+
             List<String> mobs = config.getStringList(path + "mobs");
             List<String> blocks = config.getStringList(path + "blocks");
-            String item = config.getString(path + "item");
+
+            // Wczytywanie listy lub pojedynczego stringa dla kompatybilności wstecznej
+            List<String> items = getListOrSingle(config, path + "items", path + "item");
+            List<String> eatenItems = getListOrSingle(config, path + "eatenItems", path + "eatenItem");
+            List<String> fishedItems = getListOrSingle(config, path + "fishedItems", path + "fishedItem");
+
             String enchant = config.getString(path + "enchant");
-            int enchantLevel = config.getInt(path + "enchantLevel");
-            String eatenItem = config.getString(path + "eatenItem");
-            List<String> farmedItems = config.getStringList(path + "farmedItems");
-            String fishedItem = config.getString(path + "fishedItem");
 
             String fullId = category.name() + "_" + id;
-            quests.put(fullId, new Quest(fullId, name, type, category, mobs, blocks, item, amount, rewards, lore, enchant, enchantLevel, eatenItem, farmedItems, fishedItem));
+            quests.put(fullId, new Quest(fullId, name, type, category, mobs, blocks, items, amount, rewards, lore, enchant, eatenItems, fishedItems));
         }
     }
+
+    private List<String> getListOrSingle(FileConfiguration config, String listPath, String singlePath) {
+        if (config.isList(listPath)) {
+            return config.getStringList(listPath);
+        }
+        if (config.isString(singlePath)) {
+            return Collections.singletonList(config.getString(singlePath));
+        }
+        return new ArrayList<>(); // Zwraca pustą listę, jeśli nic nie zdefiniowano
+    }
+
 
     public Quest getQuestById(String id) {
         return quests.get(id);
     }
 
-    /**
-     * Losuje misję z danej kategorii, wykluczając te, które gracz już posiada.
-     *
-     * @param category Kategoria misji.
-     * @param excludedQuestIds Lista ID misji do wykluczenia.
-     * @return Losowa misja lub null, jeśli nie ma dostępnych.
-     */
     public Quest getRandomQuest(QuestType.Category category, List<String> excludedQuestIds) {
         List<Quest> availableQuests = quests.values().stream()
                 .filter(q -> q.getCategory() == category)
@@ -82,10 +87,10 @@ public class QuestManager {
         return availableQuests.get(0);
     }
 
-    // Metoda zwracająca wszystkie misje z danej kategorii
     public List<Quest> getQuestsByCategory(QuestType.Category category) {
         return quests.values().stream()
                 .filter(q -> q.getCategory() == category)
                 .collect(Collectors.toList());
     }
 }
+

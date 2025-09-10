@@ -6,11 +6,16 @@ public enum QuestType {
     CRAFTING,
     COLLECT,
     PLACE,
-    ENCHANT,
-    ENCHANT_ITEM,
+    ENCHANT, // Dowolny enchant na dowolnym przedmiocie
+    ENCHANT_TYPE, // Określony enchant na dowolnym przedmiocie
+    ENCHANT_ITEM, // Określony enchant na określonym przedmiocie
     EATING,
     FARMING,
-    FISHING;
+    FISHING,
+    SWIM,
+    WALK,
+    GLIDING;
+
 
     public enum Category {
         DAILY,
@@ -18,3 +23,4 @@ public enum QuestType {
         MONTHLY
     }
 }
+

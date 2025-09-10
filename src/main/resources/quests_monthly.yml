@@ -1,13 +1,20 @@
 # Definicje misji miesięcznych
 
-'netherite_miner':
-  name: "&5Piekielny Górnik"
+'drwal_monthly':
+  name: "&6Zręczny Drwal"
   type: DESTROY
   blocks:
-    - ANCIENT_DEBRIS
-  amount: 128
+    - OAK_LOG
+    - SPRUCE_LOG
+    - BIRCH_LOG
+    - JUNGLE_LOG
+    - ACACIA_LOG
+    - DARK_OAK_LOG
+    - MANGROVE_LOG
+    - CHERRY_LOG
+  amount: 2000
   lore:
-    - "&7Zdobądź 128 Starożytnych Złomów."
+    - "&7Zetnij 2000 dowolnych"
+    - "&7pni drzew."
   rewards:
-    - "eco give %player% 50000"
-    - "give %player% netherite_ingot 16"
+    - "eco give %player% 5000"

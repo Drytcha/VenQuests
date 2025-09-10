@@ -1,25 +1,26 @@
 package pl.drytcha.venquests.database;
 
 public class PlayerProgress {
-    private String questId; // Usunięto 'final'
+    private String questId;
     private int progress;
-    private long startTime; // Usunięto 'final'
+    private long startTime;
+    private int startValue; // Do śledzenia statystyk początkowych (dla misji ruchowych)
 
-    /**
-     * Konstruktor używany przy tworzeniu nowego postępu misji.
-     * Automatycznie ustawia czas startu na moment utworzenia.
-     */
     public PlayerProgress(String questId, int progress) {
         this.questId = questId;
         this.progress = progress;
         this.startTime = System.currentTimeMillis();
+        this.startValue = 0; // Domyślna wartość
     }
 
-    // Prywatny konstruktor dla GSON
     private PlayerProgress() {}
 
     public void incrementProgress(int amount) {
         this.progress += amount;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     // Gettery
@@ -33,6 +34,14 @@ public class PlayerProgress {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public int getStartValue() {
+        return startValue;
+    }
+
+    public void setStartValue(int startValue) {
+        this.startValue = startValue;
     }
 }
 

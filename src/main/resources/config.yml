@@ -1,64 +1,49 @@
-# Główny plik konfiguracyjny VenQuests
-# Autor: DryTcha
-
-# Ustawienia bazy danych. Dostępne typy: SQLITE
 database:
   type: SQLITE
 
-# Ustawienia cooldownów na losowanie darmowej misji (w sekundach).
 cooldowns:
-  daily: 86400   # 24 godziny
-  weekly: 604800  # 7 dni
-  monthly: 2592000 # 30 dni
+  daily: 86400   # 1 d
+  weekly: 604800  # 7 d
+  monthly: 2592000 # 30 d
 
-# Ustawienia limitów czasowych na wykonanie misji (w sekundach).
-# Gracz musi wykonać misję w tym czasie od jej otrzymania.
 time_limits:
-  daily: 86400   # 24 godziny
-  weekly: 604800  # 7 dni
-  monthly: 2592000 # 30 dni
+  daily: 86400   # 1d
+  weekly: 604800  # 7 d
+  monthly: 2592000 # 30 d
 
-# Ustawienia zakupu dodatkowych misji
 buy_quest:
   daily:
     enabled: true
-    # Maksymalna ilość dodatkowych misji, które gracz może kupić dziennie.
-    limit: 4
-    # Koszt zakupu. Można łączyć pieniądze (money) i przedmioty (items).
+    limit: 30
     cost:
-      # Wymagana kwota (wymaga Vault). Ustaw na 0, jeśli nie jest wymagane.
-      money: 200
-      # Lista wymaganych przedmiotów. Format: 'NAZWA_MATERIAŁU:ILOŚĆ'
-      # Pełna lista materiałów: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-      items:
-        - 'DIAMOND:5'
+      money: 2500
+      # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+      items: []
   weekly:
-    enabled: true
-    limit: 2
-    cost:
-      money: 1000
-      items:
-        - 'NETHERITE_INGOT:1'
-  monthly:
-    enabled: true
+    enabled: false
     limit: 1
     cost:
-      money: 5000
+      money: 100000
+      items: []
+  monthly:
+    enabled: false
+    limit: 1
+    cost:
+      money: 200000
       items:
         - 'NETHER_STAR:1'
 
-# Ustawienia menu graficznego (GUI)
 gui:
   main_menu:
-    title: "&8» &lCentrum Zadań"
+    title: "&8&l        Centrum Zadań"
     size: 27
   daily_quests_menu:
-    title: "&8» &eTwoje Misje Dzienne"
+    title: "&8       Twoje misje dzienne"
     size: 36
   weekly_quests_menu:
-    title: "&8» &bTwoje Misje Tygodniowe"
+    title: "&8      Twoje misje tygodniowe"
     size: 36
   monthly_quests_menu:
-    title: "&8» &cTwoje Misje Miesięczne"
+    title: "&8      Twoje misje miesięczne"
     size: 36
 

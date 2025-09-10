@@ -1,4 +1,4 @@
-package pl.drytcha.venquests.listeners;
+package pl.drytcha.venquests.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import pl.drytcha.venquests.VenQuests;
-import pl.drytcha.venquests.player.PlayerData;
 
 import java.util.Map;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class PlayerEvents implements Listener {
             // Powrót do głównego wątku serwera, aby bezpiecznie dodać dane do mapy
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 plugin.getPlayerManager().addPlayer(player.getUniqueId(), data);
-                plugin.getLogger().info("Załadowano dane dla gracza " + player.getName());
+//                plugin.getLogger().info("Załadowano dane dla gracza " + player.getName());
             });
         });
     }
@@ -55,7 +54,7 @@ public class PlayerEvents implements Listener {
                 // Usunięcie gracza z mapy w głównym wątku, aby uniknąć problemów
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     plugin.getPlayerManager().removePlayer(playerUUID);
-                    plugin.getLogger().info("Zapisano i usunięto z cache dane dla gracza " + player.getName());
+//                    plugin.getLogger().info("Zapisano i usunięto z cache dane dla gracza " + player.getName());
                 });
             }
         });

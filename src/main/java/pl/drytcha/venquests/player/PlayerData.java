@@ -3,9 +3,12 @@ package pl.drytcha.venquests.player;
 import pl.drytcha.venquests.VenQuests;
 import pl.drytcha.venquests.config.QuestType;
 import pl.drytcha.venquests.database.PlayerProgress;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -25,8 +28,29 @@ public class PlayerData {
     private int dailyQuestsBought;
     private long lastDailyBuyTimestamp;
 
+    // Zestaw do śledzenia misji, które są w trakcie oznaczania jako ukończone, aby uniknąć wielokrotnego przyznawania nagród.
+    // 'transient' oznacza, że to pole nie będzie zapisywane w bazie danych.
+    private transient final Set<String> questsBeingCompleted = new HashSet<>();
+
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    /**
+     * Sprawdza i oznacza misję jako "w trakcie ukończenia".
+     * @param questId ID misji do sprawdzenia.
+     * @return true, jeśli misja została pomyślnie oznaczona; false, jeśli była już oznaczona.
+     */
+    public boolean startCompletingQuest(String questId) {
+        return questsBeingCompleted.add(questId);
+    }
+
+    /**
+     * Usuwa oznaczenie misji "w trakcie ukończenia".
+     * @param questId ID misji.
+     */
+    public void finishCompletingQuest(String questId) {
+        questsBeingCompleted.remove(questId);
     }
 
     public List<PlayerProgress> getActiveQuestsForCategory(QuestType.Category category) {
@@ -52,22 +76,24 @@ public class PlayerData {
         }
     }
 
-    public void addAdditionalQuest(QuestType.Category category, String questId) {
+    public PlayerProgress addAdditionalQuest(QuestType.Category category, String questId) {
         PlayerProgress progress = new PlayerProgress(questId, 0);
         switch (category) {
             case DAILY: getAdditionalDailyQuests().add(progress); break;
             case WEEKLY: getAdditionalWeeklyQuests().add(progress); break;
             case MONTHLY: getAdditionalMonthlyQuests().add(progress); break;
         }
+        return progress;
     }
 
-    public void setMainQuest(QuestType.Category category, String questId) {
+    public PlayerProgress setMainQuest(QuestType.Category category, String questId) {
         PlayerProgress progress = new PlayerProgress(questId, 0);
         switch (category) {
             case DAILY: this.dailyQuest = progress; break;
             case WEEKLY: this.weeklyQuest = progress; break;
             case MONTHLY: this.monthlyQuest = progress; break;
         }
+        return progress;
     }
 
     public void removeQuest(QuestType.Category category, PlayerProgress progress) {
@@ -125,7 +151,6 @@ public class PlayerData {
         int boughtAmount = 0;
         switch(category) {
             case DAILY: boughtAmount = dailyQuestsBought; break;
-            // Tutaj można dodać logikę dla Tygodniowych/Miesięcznych limitów
         }
         return boughtAmount < limit;
     }
@@ -138,7 +163,6 @@ public class PlayerData {
             this.dailyQuestsBought++;
             this.lastDailyBuyTimestamp = System.currentTimeMillis();
         }
-        // Tutaj można dodać logikę dla Tygodniowych/Miesięcznych limitów
     }
 
     private boolean isSameDay(long time1, long time2) {
@@ -151,8 +175,7 @@ public class PlayerData {
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 
-
-    // Standardowe Gettery i Settery
+    // Gettery i Settery
     public UUID getUuid() { return uuid; }
     public PlayerProgress getDailyQuest() { return dailyQuest; }
     public void setDailyQuest(PlayerProgress dailyQuest) { this.dailyQuest = dailyQuest; }

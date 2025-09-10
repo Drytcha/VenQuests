@@ -1,106 +1,121 @@
-#  Definicje misji dziennych. Możesz dodać ich nielimitowaną ilość.
-#    Każda misja musi mieć unikalny klucz (np. '1', '2', 'zombie_slayer').
-#  Typy misji: MOBS, DESTROY, CRAFTING, COLLECT, PLACE, ENCHANT, ENCHANT_ITEM, EATING, FARMING, TRADE_VILLAGER, TRADE_PIGLIN
-'1':
-  name: "&cKrwawy Księżyc"
-  type: MOBS
-  mobs:
-    - ZOMBIE
-  amount: 200
-  lore:
-    - "&7Zabij 200 Zombie,"
-    - "&7aby oczyścić okolicę."
-  rewards:
-    - "eco give %player% 500"
-    - "tell %player% &aGratulacje! Ukończyłeś misję Krwawy Księżyc!"
-
-'2':
-  name: "&bGórnik Diamentów"
+'drwal':
+  name: "&6Zręczny Drwal"
   type: DESTROY
   blocks:
-    - DIAMOND_ORE
-    - DEEPSLATE_DIAMOND_ORE
+    - OAK_LOG
+    - SPRUCE_LOG
+    - BIRCH_LOG
+    - JUNGLE_LOG
+    - ACACIA_LOG
+    - DARK_OAK_LOG
+    - MANGROVE_LOG
+    - CHERRY_LOG
   amount: 64
   lore:
-    - "&7Wykop 64 rudy diamentu."
+    - "&7Zetnij 64 dowolnych"
+    - "&7pni drzew."
   rewards:
-    - "eco give %player% 1000"
-    - "give %player% diamond 10"
+    - "eco give %player% 5000"
 
-'3':
-  name: "&eMistrz Rzemiosła"
+'kucharz':
+  name: "&cMistrz Kuchni"
   type: CRAFTING
-  item: DIAMOND_PICKAXE
-  amount: 1
+  items:
+    - BREAD
+  amount: 32
   lore:
-    - "&7Stwórz diamentowy kilof."
+    - "&7Upiecz 32 bochenki chleba."
   rewards:
-    - "eco give %player% 2000"
+    - "eco give %player% 200"
 
-'4':
-  name: "&aPoszukiwacz Węgla"
-  type: COLLECT
-  item: COAL
-  amount: 256
+'pogromca_szkieletow':
+  name: "&8Pogromca Szkieletów"
+  type: MOBS
+  mobs:
+    - SKELETON
+  amount: 50
   lore:
-    - "&7Zbierz 256 węgla. Możesz go wykopać lub"
-    - "&7znaleźć w skrzyniach."
+    - "&7Pokonaj 50 szkieletów."
+  rewards:
+    - "give %player% arrow 32"
+    - "eco give %player% 300"
+
+'kolekcjoner_skory':
+  name: "&eZbieracz Skóry"
+  type: COLLECT
+  items:
+    - LEATHER
+  amount: 32
+  lore:
+    - "&7Zbierz 32 sztuki skóry,"
+    - "&7aby wspomóc lokalnego rzemieślnika."
   rewards:
     - "eco give %player% 400"
 
-'5':
-  name: "&9Kamieniarz"
+'budowniczy':
+  name: "&aMłody Architekt"
   type: PLACE
-  item: COBBLESTONE
-  amount: 512
+  items:
+    - DIRT
+  amount: 256
   lore:
-    - "&7Ustaw 512 bloków bruku."
+    - "&7Wykorzystaj swoją kreatywność i"
+    - "&7umieść 256 bloków ziemi."
   rewards:
-    - "eco give %player% 350"
+    - "eco give %player% 150"
 
-'6':
-  name: "&dZaklinacz"
-  type: ENCHANT
-  enchant: PROTECTION
-  enchantLevel: 4
-  amount: 1
-  lore:
-    - "&7Zaczaruj dowolny przedmiot zaklęciem Protection 4."
-  rewards:
-    - "eco give %player% 5000"
-    - "give %player% diamond_block 1"
-
-'7':
-  name: "&dMistrz Ostrzy"
-  type: ENCHANT_ITEM
-  item: DIAMOND_SWORD
-  enchant: SHARPNESS
-  enchantLevel: 5
-  amount: 1
-  lore:
-    - "&7Zaczaruj diamentowy miecz zaklęciem Sharpness 5."
-  rewards:
-    - "eco give %player% 7500"
-
-'8':
-  name: "&2Wiecznie Głodny"
+'smakosz_ciastek':
+  name: "&6Ciasteczkowy Potwór"
   type: EATING
-  eatenItem: GOLDEN_CARROT
-  amount: 10
+  items:
+    - COOKIE
+  amount: 32
   lore:
-    - "&7Zjedz 10 Złotych Marchewek."
+    - "&7Zjedz 32 ciastka."
   rewards:
-    - "eco give %player% 1500"
-    - "give %player% golden_apple 5"
+    - "give %player% milk_bucket 1"
+    - "eco give %player% 220"
 
-'9':
-  name: "&6Żniwiarz Pszenicy"
+'marchewkowy_farmer':
+  name: "&6Złote Zbiory"
   type: FARMING
-  farmedItems:
-    - WHEAT
+  blocks:
+    - CARROTS
   amount: 128
   lore:
-    - "&7Zbierz 128 pszenicy, aby wesprzeć osadę."
+    - "&7Zbierz 128 marchewek."
   rewards:
     - "eco give %player% 300"
-    - "give %player% bread 64"
+
+'morski_wedkarz':
+  name: "&9Morski Wilk"
+  type: FISHING
+  fishedItems:
+    - COD
+    - SALMON
+  amount: 16
+  lore:
+    - "&7Złów 16 dorszy."
+  rewards:
+    - "eco give %player% 350"
+    - "give %player% cooked_cod 16"
+
+'podroznik':
+  name: "&2Wędrowiec"
+  type: WALK
+  amount: 5000 # 5 km
+  lore:
+    - "&7Przemierz 5000 metrów"
+    - "&7po świecie."
+  rewards:
+    - "eco give %player% 800"
+
+'poszukiwacz_zaklec':
+  name: "&5Adept Magii"
+  type: ENCHANT
+  amount: 3
+  lore:
+    - "&7Zaklnij 3 dowolne przedmioty."
+  rewards:
+    - "give %player% experience_bottle 16"
+    - "eco give %player% 1000"

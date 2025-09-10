@@ -38,7 +38,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             }
             // Sprawdzamy, czy dane gracza są już załadowane
             if (plugin.getPlayerManager().getPlayerData(player.getUniqueId()) == null) {
-                player.sendMessage(Utils.colorize("&cTwoje dane są wciąż wczytywane. Spróbuj ponownie za chwilę."));
+                player.sendMessage(Utils.colorize("&cTwoje dane są wciąż wczytywane. Wyjdź i wejdź na serwer."));
                 return true;
             }
             plugin.getGui().openMainMenu(player);

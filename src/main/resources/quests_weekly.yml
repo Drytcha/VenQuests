@@ -1,15 +1,20 @@
 # Definicje misji tygodniowych
 
-'wither_hunter':
-  name: "&8Łowca Mroku"
-  type: MOBS
-  mobs:
-    - WITHER
-  amount: 3
+'drwal-weekly':
+  name: "&6Zręczny Drwal"
+  type: DESTROY
+  blocks:
+    - OAK_LOG
+    - SPRUCE_LOG
+    - BIRCH_LOG
+    - JUNGLE_LOG
+    - ACACIA_LOG
+    - DARK_OAK_LOG
+    - MANGROVE_LOG
+    - CHERRY_LOG
+  amount: 256
   lore:
-    - "&7Pokonaj 3 Withery,"
-    - "&7aby udowodnić swoją siłę."
+    - "&7Zetnij 256 dowolnych"
+    - "&7pni drzew."
   rewards:
-    - "eco give %player% 10000"
-    - "give %player% nether_star 1"
-    - "broadcast &6Gracz &e%player% &6ukończył tygodniową misję Łowcy Mroku!"
+    - "eco give %player% 5000"
