@@ -1,5 +1,147 @@
-'drwal':
-  name: "&6Zręczny Drwal"
+###################################
+############## MOBS  ##############
+###################################
+# type: MOBS
+# mobs:
+#   - ZOMBIE
+'mobs_1':
+  name: "&cPogromca Szkieletów"
+  type: MOBS
+  mobs:
+    - SKELETON
+    - WITHER_SKELETON
+  amount: 32
+  lore:
+    - "&7Zabij 32 szkielety"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_2':
+  name: "&cPRZECIWKO APOKALIPSY"
+  type: MOBS
+  mobs:
+    - ZOMBIE
+    - ZOMBIE_VILLAGER
+  amount: 32
+  lore:
+    - "&7Zabij 32 zombie"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_3':
+  name: "&cSzydełkowanie"
+  type: MOBS
+  mobs:
+    - SPIDER
+    - CAVE_SPIDER
+  amount: 32
+  lore:
+    - "&7Zabij 32 pająków"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_4':
+  name: "&cMordowanie Świnek"
+  type: MOBS
+  mobs:
+    - PIG
+  amount: 32
+  lore:
+    - "&7Zabij 32 świnek"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_5':
+  name: "&cMordowanie Krówek"
+  type: MOBS
+  mobs:
+    - COW
+    - MOOSHROOM
+  amount: 32
+  lore:
+    - "&7Zabij 32 krów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_6':
+  name: "&cMordowanie Kujciaków"
+  type: MOBS
+  mobs:
+    - CHICKEN
+  amount: 32
+  lore:
+    - "&7Zabij 32 kujciaków"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_7':
+  name: "&cTeleportująca Sprawa"
+  type: MOBS
+  mobs:
+    - ENDERMAN
+  amount: 4
+  lore:
+    - "&7Zabij 4 endermany"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_8':
+  name: "&cBrudna sprawa"
+  type: MOBS
+  mobs:
+    - SQUID
+  amount: 16
+  lore:
+    - "&7Zabij 16 kałamarnic"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'mobs_9':
+  name: "&cWybuchowa sprawa"
+  type: MOBS
+  mobs:
+    - CREEPER
+  amount: 16
+  lore:
+    - "&7Zabij 16 creeperów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############# DESTROY #############
+###################################
+# type: DESTROY
+# blocks:
+#   - STONE
+'destroy_1':
+  name: "&8Zręczny Drwal"
   type: DESTROY
   blocks:
     - OAK_LOG
@@ -10,112 +152,836 @@
     - DARK_OAK_LOG
     - MANGROVE_LOG
     - CHERRY_LOG
+    - STRIPPED_OAK_LOG
+    - STRIPPED_SPRUCE_LOG
+    - STRIPPED_BIRCH_LOG
+    - STRIPPED_JUNGLE_LOG
+    - STRIPPED_ACACIA_LOG
+    - STRIPPED_DARK_OAK_LOG
+    - STRIPPED_MANGROVE_LOG
+    - STRIPPED_CHERRY_LOG
   amount: 64
   lore:
-    - "&7Zetnij 64 dowolnych"
-    - "&7pni drzew."
+    - "&7Zetnij 64 dowolnych pni drzew"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
     - "eco give %player% 5000"
 
-'kucharz':
-  name: "&cMistrz Kuchni"
+'destroy_2':
+  name: "&8Lampiarz"
+  type: DESTROY
+  blocks:
+    - OCHRE_FROGLIGHT
+    - VERDANT_FROGLIGHT
+    - PEARLESCENT_FROGLIGHT
+  amount: 32
+  lore:
+    - "&7Zniszcz 32 żabich lamp"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'destroy_3':
+  name: "&8Piekielny Drwal"
+  type: DESTROY
+  blocks:
+    - CRIMSON_STEM
+    - WARPED_STEM
+  amount: 32
+  lore:
+    - "&7Zniszcz 32 szkarłatny / spaczony trzon"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'destroy_4':
+  name: "&8Górnik"
+  type: DESTROY
+  blocks:
+    - COAL_ORE
+    - DEEPSLATE_COAL_ORE
+  amount: 32
+  lore:
+    - "&7Wykop 32 złóż węgla"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'destroy_5':
+  name: "&8Płacząca sprawa"
+  type: DESTROY
+  blocks:
+    - CRYING_OBSIDIAN
+  amount: 8
+  lore:
+    - "&7Wykop 8 razy płaczący obsydian"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'destroy_6':
+  name: "&8Twarda sytuacja"
+  type: DESTROY
+  blocks:
+    - CRYING_OBSIDIAN
+  amount: 8
+  lore:
+    - "&7Wykop 32 obsydianu"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############ CRAFTINGS ############
+###################################
+# type: CRAFTING
+# items:
+#   - BREAD
+'craft_1':
+  name: "&6Kowal"
   type: CRAFTING
   items:
-    - BREAD
-  amount: 32
+    - ANVIL
+  amount: 1
   lore:
-    - "&7Upiecz 32 bochenki chleba."
+    - "&7Stwórz kowadło"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "eco give %player% 200"
+    - "eco give %player% 5000"
 
-'pogromca_szkieletow':
-  name: "&8Pogromca Szkieletów"
-  type: MOBS
-  mobs:
-    - SKELETON
-  amount: 50
+'craft_2':
+  name: "&6Latarnik"
+  type: CRAFTING
+  items:
+    - SEA_LANTERN
+  amount: 8
   lore:
-    - "&7Pokonaj 50 szkieletów."
+    - "&7Stwórz 8 morskich latarnii"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "give %player% arrow 32"
-    - "eco give %player% 300"
+    - "eco give %player% 5000"
 
-'kolekcjoner_skory':
-  name: "&eZbieracz Skóry"
+'craft_3':
+  name: "&6Kryształki"
+  type: CRAFTING
+  items:
+    - END_CRYSTAL
+  amount: 8
+  lore:
+    - "&7Stwórz 8 kryształów endu"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'craft_4':
+  name: "&6Miodowe bloki"
+  type: CRAFTING
+  items:
+    - HONEY_BLOCK
+  amount: 8
+  lore:
+    - "&7Stwórz 8 bloków miodu"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'craft_5':
+  name: "&6Slime bloki"
+  type: CRAFTING
+  items:
+    - SLIME_BLOCK
+  amount: 8
+  lore:
+    - "&7Stwórz 8 bloków slime"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'craft_6':
+  name: "&6Panele słoneczne"
+  type: CRAFTING
+  items:
+    - DAYLIGHT_DETECTOR
+  amount: 8
+  lore:
+    - "&7Stwórz 8 paneli słonecznych"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############# COLLECT #############
+###################################
+# type: COLLECT
+# items:
+#   - STONE
+'collect_1':
+  name: "&eBetoniara"
   type: COLLECT
   items:
-    - LEATHER
-  amount: 32
+    - WHITE_CONCRETE
+    - LIGHT_GRAY_CONCRETE
+    - GRAY_CONCRETE
+    - BLACK_CONCRETE
+    - BROWN_CONCRETE
+    - RED_CONCRETE
+    - ORANGE_CONCRETE
+    - YELLOW_CONCRETE
+    - LIME_CONCRETE
+    - GREEN_CONCRETE
+    - CYAN_CONCRETE
+    - LIGHT_BLUE_CONCRETE
+    - BLUE_CONCRETE
+    - PURPLE_CONCRETE
+    - MAGENTA_CONCRETE
+    - PINK_CONCRETE
+  amount: 64
   lore:
-    - "&7Zbierz 32 sztuki skóry,"
-    - "&7aby wspomóc lokalnego rzemieślnika."
+    - "&7Zbierz 64 dowolnego betonu"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "eco give %player% 400"
+    - "eco give %player% 5000"
 
-'budowniczy':
-  name: "&aMłody Architekt"
+###################################
+############## PLACE ##############
+###################################
+# type: PLACE
+# items:
+#   - STONE
+'place_1':
+  name: "&aGłowa w betoniarce"
   type: PLACE
   items:
-    - DIRT
-  amount: 256
+    - WHITE_CONCRETE_POWDER
+    - LIGHT_GRAY_CONCRETE_POWDER
+    - GRAY_CONCRETE_POWDER
+    - BLACK_CONCRETE_POWDER
+    - BROWN_CONCRETE_POWDER
+    - RED_CONCRETE_POWDER
+    - ORANGE_CONCRETE_POWDER
+    - YELLOW_CONCRETE_POWDER
+    - LIME_CONCRETE_POWDER
+    - GREEN_CONCRETE_POWDER
+    - CYAN_CONCRETE_POWDER
+    - LIGHT_BLUE_CONCRETE_POWDER
+    - BLUE_CONCRETE_POWDER
+    - PURPLE_CONCRETE_POWDER
+    - MAGENTA_CONCRETE_POWDER
+    - PINK_CONCRETE_POWDER
+  amount: 64
   lore:
-    - "&7Wykorzystaj swoją kreatywność i"
-    - "&7umieść 256 bloków ziemi."
+    - "&7Postaw 64 dowolnego cementu"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "eco give %player% 150"
-
-'smakosz_ciastek':
-  name: "&6Ciasteczkowy Potwór"
-  type: EATING
+    - "eco give %player% 5000"
+'place_2':
+  name: "&aSzklarnia"
+  type: PLACE
   items:
-    - COOKIE
-  amount: 32
+    - GLASS
+    - WHITE_STAINED_GLASS
+    - LIGHT_STAINED_GLASS
+    - GRAY_STAINED_GLASS
+    - BLACK_STAINED_GLASS
+    - BROWN_STAINED_GLASS
+    - RED_STAINED_GLASS
+    - ORANGE_STAINED_GLASS
+    - YELLOW_STAINED_GLASS
+    - LIME_STAINED_GLASS
+    - GREEN_STAINED_GLASS
+    - CYAN_STAINED_GLASS
+    - LIGHT_BLUE_STAINED_GLASS
+    - BLUE_STAINED_GLASS
+    - PURPLE_STAINED_GLASS
+    - MAGENTA_STAINED_GLASS
+    - PINK_STAINED_GLASS
+  amount: 64
   lore:
-    - "&7Zjedz 32 ciastka."
+    - "&7Postaw 64 bloki szkła"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "give %player% milk_bucket 1"
-    - "eco give %player% 220"
+    - "eco give %player% 5000"
 
-'marchewkowy_farmer':
-  name: "&6Złote Zbiory"
-  type: FARMING
-  blocks:
-    - CARROTS
-  amount: 128
+'place_3':
+  name: "&aBuDoWa"
+  type: PLACE
+  items:
+    - COBBLESTONE
+  amount: 64
   lore:
-    - "&7Zbierz 128 marchewek."
+    - "&7Postaw 64 bruku"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "eco give %player% 300"
+    - "eco give %player% 5000"
 
-'morski_wedkarz':
-  name: "&9Morski Wilk"
-  type: FISHING
-  fishedItems:
-    - COD
-    - SALMON
-  amount: 16
-  lore:
-    - "&7Złów 16 dorszy."
-  rewards:
-    - "eco give %player% 350"
-    - "give %player% cooked_cod 16"
-
-'podroznik':
-  name: "&2Wędrowiec"
-  type: WALK
-  amount: 5000 # 5 km
-  lore:
-    - "&7Przemierz 5000 metrów"
-    - "&7po świecie."
-  rewards:
-    - "eco give %player% 800"
-
-'poszukiwacz_zaklec':
-  name: "&5Adept Magii"
+###################################
+############# ENCHANT #############
+###################################
+# type: ENCHANT
+# amount: 3
+'enchant_1':
+  name: "&5Czas enchantu I"
   type: ENCHANT
   amount: 3
   lore:
-    - "&7Zaklnij 3 dowolne przedmioty."
+    - "&7Zenchantuj 3 dowolne przedmioty"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
   rewards:
-    - "give %player% experience_bottle 16"
-    - "eco give %player% 1000"
+    - "eco give %player% 5000"
+
+'enchant_2':
+  name: "&5Czas enchantu II"
+  type: ENCHANT
+  amount: 6
+  lore:
+    - "&7Zenchantuj 6 dowolnych pzedmiotów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'enchant_3':
+  name: "&5Czas enchantu III"
+  type: ENCHANT
+  amount: 12
+  lore:
+    - "&7Zenchantuj 12 dowolnych przedmiotów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'enchant_4':
+  name: "&5Czas enchantu IV"
+  type: ENCHANT
+  amount: 18
+  lore:
+    - "&7Zenchantuj 18 dowolnych przedmiotów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'enchant_5':
+  name: "&5Czas enchantu V"
+  type: ENCHANT
+  amount: 30
+  lore:
+    - "&7Zenchantuj 30 dowolnych przedmiotów"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############# EATING #############
+###################################
+# type: EATING
+# eatenItems:
+#   - COOKIE
+'eating_1':
+  name: "&ePora śniadaniowa"
+  type: EATING
+  eatenItems:
+    - APPLE
+    - GOLDEN_APPLE
+    - ENCHANTED_GOLDEN_APPLE
+    - MELON_SLICE
+    - SWEET_BERRIES
+    - GLOW_BERRIES
+    - CHORUS_FRUIT
+    - CARROT
+    - GOLDEN_CARROT
+    - POTATO
+    - BAKED_POTATO
+    - POISONOUS_POTATO
+    - BEETROOT
+    - DRIED_KELP
+    - BEEF
+    - COOKED_BEEF
+    - PORKCHOP
+    - COOKED_PORKCHOP
+    - MUTTON
+    - COOKED_MUTTON
+    - CHICKEN
+    - COOKED_CHICKEN
+    - RABBIT
+    - COOKED_RABBIT
+    - COD
+    - COOKED_COD
+    - SALMON
+    - COOKED_SALMON
+    - TROPICAL_FISH
+    - PUFFERFISH
+    - BREAD
+    - COOKIE
+    - CAKE
+    - PUMPKIN_PIE
+    - ROTTEN_FLESH
+    - SPIDER_EYE
+    - MUSHROOM_STEW
+    - BEETROOT_SOUP
+    - RABBIT_STEW
+    - SUSPICIOUS_STEW
+  amount: 16
+  lore:
+    - "&7Zjedz 16 razy cokolwiek"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'eating_2':
+  name: "&ePora obiadowa"
+  type: EATING
+  eatenItems:
+    - APPLE
+    - GOLDEN_APPLE
+    - ENCHANTED_GOLDEN_APPLE
+    - MELON_SLICE
+    - SWEET_BERRIES
+    - GLOW_BERRIES
+    - CHORUS_FRUIT
+    - CARROT
+    - GOLDEN_CARROT
+    - POTATO
+    - BAKED_POTATO
+    - POISONOUS_POTATO
+    - BEETROOT
+    - DRIED_KELP
+    - BEEF
+    - COOKED_BEEF
+    - PORKCHOP
+    - COOKED_PORKCHOP
+    - MUTTON
+    - COOKED_MUTTON
+    - CHICKEN
+    - COOKED_CHICKEN
+    - RABBIT
+    - COOKED_RABBIT
+    - COD
+    - COOKED_COD
+    - SALMON
+    - COOKED_SALMON
+    - TROPICAL_FISH
+    - PUFFERFISH
+    - BREAD
+    - COOKIE
+    - CAKE
+    - PUMPKIN_PIE
+    - ROTTEN_FLESH
+    - SPIDER_EYE
+    - MUSHROOM_STEW
+    - BEETROOT_SOUP
+    - RABBIT_STEW
+    - SUSPICIOUS_STEW
+  amount: 64
+  lore:
+    - "&7Zjedz 64 razy cokolwiek"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'eating_3':
+  name: "&eKolacja"
+  type: EATING
+  eatenItems:
+    - APPLE
+    - GOLDEN_APPLE
+    - ENCHANTED_GOLDEN_APPLE
+    - MELON_SLICE
+    - SWEET_BERRIES
+    - GLOW_BERRIES
+    - CHORUS_FRUIT
+    - CARROT
+    - GOLDEN_CARROT
+    - POTATO
+    - BAKED_POTATO
+    - POISONOUS_POTATO
+    - BEETROOT
+    - DRIED_KELP
+    - BEEF
+    - COOKED_BEEF
+    - PORKCHOP
+    - COOKED_PORKCHOP
+    - MUTTON
+    - COOKED_MUTTON
+    - CHICKEN
+    - COOKED_CHICKEN
+    - RABBIT
+    - COOKED_RABBIT
+    - COD
+    - COOKED_COD
+    - SALMON
+    - COOKED_SALMON
+    - TROPICAL_FISH
+    - PUFFERFISH
+    - BREAD
+    - COOKIE
+    - CAKE
+    - PUMPKIN_PIE
+    - ROTTEN_FLESH
+    - SPIDER_EYE
+    - MUSHROOM_STEW
+    - BEETROOT_SOUP
+    - RABBIT_STEW
+    - SUSPICIOUS_STEW
+  amount: 32
+  lore:
+    - "&7Zjedz 32 razy cokolwiek"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############# FARMING #############
+###################################
+# type: FARMING
+# blocks:
+#   - WHEAT / CARROTS / POTATOES / BEETROOTS / NETHER_WART / PUMPKIN / MELON / COCOA / SUGAR_CANE / CACTUS / BAMBOO
+'farming_1':
+  name: "&eRolnik"
+  type: FARMING
+  blocks:
+    - WHEAT
+  amount: 32
+  lore:
+    - "&7Zbierz 32 zboża z pola"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'farming_2':
+  name: "&eRolnik"
+  type: FARMING
+  blocks:
+    - POTATOES
+  amount: 32
+  lore:
+    - "&7Zbierz 32 ziemniaków z pola"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'farming_3':
+  name: "&eRolnik"
+  type: FARMING
+  blocks:
+    - CARROTS
+  amount: 32
+  lore:
+    - "&7Zbierz 32 marchewek z pola"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'farming_4':
+  name: "&eRolnik"
+  type: FARMING
+  blocks:
+    - BEETROOTS
+  amount: 32
+  lore:
+    - "&7Zbierz 32 buraków z pola"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'farming_5':
+  name: "&eRolnik"
+  type: FARMING
+  blocks:
+    - COCOA
+  amount: 32
+  lore:
+    - "&7Zbierz 32 kakaowca z pola"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+############# FISHING #############
+###################################
+# type: FISHING
+# fishedItems:
+#   - COD
+'fishing_1':
+  name: "&eRybak"
+  type: FISHING
+  blocks:
+    - SADDLE
+  amount: 1
+  lore:
+    - "&7Złów siodło"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'fishing_2':
+  name: "&eRybak"
+  type: FISHING
+  blocks:
+    - TRIPWIRE_HOOK
+  amount: 4
+  lore:
+    - "&7Złów 4 TRIPWIRE_HOOK"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'fishing_3':
+  name: "&eRybak"
+  type: FISHING
+  blocks:
+    - NAMETAG
+  amount: 4
+  lore:
+    - "&7Złów 4 znaczniki"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+###################################
+###### SWIM / WALK / GLIDING ######
+###################################
+# type: SWIM / WALK / GLIDING
+# amount: 5000 # 5km
+
+'walk_1':
+  name: "&eSpacerek"
+  type: WALK
+  amount: 2000
+  lore:
+    - "&7Przejdź 2000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'walk_2':
+  name: "&eSpacerek"
+  type: WALK
+  amount: 4000
+  lore:
+    - "&7Przejdź 4000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'walk_3':
+  name: "&eSpacerek"
+  type: WALK
+  amount: 6000
+  lore:
+    - "&7Przejdź 6000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'walk_4':
+  name: "&eSpacerek"
+  type: WALK
+  amount: 8000
+  lore:
+    - "&7Przejdź 8000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'walk_5':
+  name: "&eSpacerek"
+  type: WALK
+  amount: 10000
+  lore:
+    - "&7Przejdź 10000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'swim_1':
+  name: "&eNurek"
+  type: SWIM
+  amount: 1000
+  lore:
+    - "&7Przepłyń 1000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'swim_2':
+  name: "&eNurek"
+  type: SWIM
+  amount: 2000
+  lore:
+    - "&7Przejdź 2000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'swim_3':
+  name: "&eNurek"
+  type: SWIM
+  amount: 3000
+  lore:
+    - "&7Przejdź 3000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'swim_4':
+  name: "&eNurek"
+  type: SWIM
+  amount: 4000
+  lore:
+    - "&7Przejdź 4000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'swim_5':
+  name: "&eNurek"
+  type: SWIM
+  amount: 5000
+  lore:
+    - "&7Przejdź 5000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'gliding_1':
+  name: "&eSzybowanie"
+  type: GLIDING
+  amount: 5000
+  lore:
+    - "&7Szybuj przez 5000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'gliding_2':
+  name: "&eSzybowanie"
+  type: GLIDING
+  amount: 10000
+  lore:
+    - "&7Szybuj przez 10000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'gliding_3':
+  name: "&eSzybowanie"
+  type: GLIDING
+  amount: 15000
+  lore:
+    - "&7Szybuj przez 15000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'gliding_4':
+  name: "&eSzybowanie"
+  type: GLIDING
+  amount: 20000
+  lore:
+    - "&7Szybuj przez 20000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"
+
+'gliding_5':
+  name: "&eSzybowanie"
+  type: GLIDING
+  amount: 25000
+  lore:
+    - "&7Szybuj przez 25000m"
+    - "&7"
+    - "&6Nagroda:"
+    - "&e- 5000$"
+  rewards:
+    - "eco give %player% 5000"

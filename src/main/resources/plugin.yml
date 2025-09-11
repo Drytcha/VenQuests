@@ -1,8 +1,8 @@
 name: VenQuests
-version: '1.2'
+version: '1.0nm'
 main: pl.drytcha.venquests.VenQuests
 api-version: '1.20'
-author: DryTcha
+author: Drytcha
 description: Zaawansowany plugin na misje dzienne, tygodniowe i miesięczne.
 depend: [Vault]
 

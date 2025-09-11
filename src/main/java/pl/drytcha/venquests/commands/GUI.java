@@ -45,11 +45,39 @@ public class GUI implements Listener {
             return;
         }
 
-        checkAndRemoveExpiredQuests(playerData);
+        checkAndRemoveExpiredQuests(player);
 
         String title = Utils.colorize(plugin.getConfig().getString("gui.main_menu.title"));
         int size = plugin.getConfig().getInt("gui.main_menu.size");
         Inventory inv = Bukkit.createInventory(player, size, title);
+
+        updateMainMenuItems(inv, player);
+        player.openInventory(inv);
+
+        Map<UUID, BukkitTask> tasks = plugin.getGuiUpdateTasks();
+        if (tasks.containsKey(player.getUniqueId())) {
+            tasks.get(player.getUniqueId()).cancel();
+        }
+
+        BukkitTask task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!player.isOnline() || !player.getOpenInventory().getTitle().equals(title)) {
+                    this.cancel();
+                    tasks.remove(player.getUniqueId());
+                    return;
+                }
+                updateMainMenuItems(player.getOpenInventory().getTopInventory(), player);
+            }
+        }.runTaskTimer(plugin, 20L, 20L);
+
+        tasks.put(player.getUniqueId(), task);
+    }
+
+    // METODA AKTUALIZUJĄCA ITEMY W GŁÓWNYM MENU
+    public void updateMainMenuItems(Inventory inv, Player player) {
+        PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
+        if (playerData == null) return;
 
         // Misje Dzienne
         List<String> dailyLore = new ArrayList<>();
@@ -95,9 +123,8 @@ public class GUI implements Listener {
         monthlyLore.add(Utils.colorize("&7Kliknij, aby zobaczyć swoje misje"));
         monthlyLore.add(Utils.colorize("&7lub odebrać nową."));
         inv.setItem(15, createGuiItem(Material.BEACON, "&c&lMisje Miesięczne", monthlyLore));
-
-        player.openInventory(inv);
     }
+
 
     // DEDYKOWANE MENU Z ODŚWIEŻANIEM
     public void openCategoryMenu(Player player, QuestType.Category category) {
@@ -106,7 +133,7 @@ public class GUI implements Listener {
             player.sendMessage(Utils.colorize("&cWystąpił błąd podczas ładowania Twoich danych. Spróbuj wejść ponownie na serwer."));
             return;
         }
-        checkAndRemoveExpiredQuests(playerData);
+        checkAndRemoveExpiredQuests(player);
 
         String configPath = category.name().toLowerCase();
         String title = Utils.colorize(plugin.getConfig().getString("gui." + configPath + "_quests_menu.title"));
@@ -129,6 +156,7 @@ public class GUI implements Listener {
                     tasks.remove(player.getUniqueId());
                     return;
                 }
+                checkAndRemoveExpiredQuests(player);
                 updateCategoryMenuItems(player.getOpenInventory().getTopInventory(), player, category);
             }
         }.runTaskTimer(plugin, 20L, 20L);
@@ -142,14 +170,9 @@ public class GUI implements Listener {
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
         if (playerData == null) return;
 
-        // Czyszczenie starych itemów misji
-        for (int i = 0; i < inv.getSize() - 9; i++) {
-            inv.setItem(i, null);
-        }
+        inv.clear(); // Czyścimy całe GUI przed ponownym wrysowaniem
 
         List<PlayerProgress> activeQuests = playerData.getActiveQuestsForCategory(category);
-
-        int firstEmptySlot = 0;
 
         for (int i = 0; i < activeQuests.size(); i++) {
             PlayerProgress progress = activeQuests.get(i);
@@ -191,22 +214,11 @@ public class GUI implements Listener {
                 long timeLimitMillis = TimeUnit.SECONDS.toMillis(timeLimitSeconds);
                 long remainingMillis = (progress.getStartTime() + timeLimitMillis) - System.currentTimeMillis();
 
-                if (remainingMillis > 0) {
-                    lore.add(Utils.getMessage("quest_time_left").replace("%time%", Utils.formatTime(remainingMillis)));
-                } else {
-                    lore.add(Utils.getMessage("quest_time_left").replace("%time%", "&cPrzedawniono"));
-                }
+                lore.add(Utils.getMessage("quest_time_left").replace("%time%", Utils.formatTime(remainingMillis)));
 
                 inv.setItem(i, createGuiItem(Material.BOOK, quest.getName(), lore));
-                firstEmptySlot = i + 1;
             }
         }
-
-        // Przycisk do wzięcia darmowej misji
-        if (playerData.getMainQuest(category) == null && !playerData.isOnCooldown(category)) {
-            inv.setItem(firstEmptySlot, createGuiItem(Material.WRITABLE_BOOK, "&a&lOdbierz darmową misję", "&7Kliknij, aby wylosować nową", "&7darmową misję dla tej kategorii."));
-        }
-
 
         // Opcja zakupu
         if (plugin.getConfig().getBoolean("buy_quest." + configPath + ".enabled")) {
@@ -263,15 +275,8 @@ public class GUI implements Listener {
         Map<UUID, BukkitTask> tasks = plugin.getGuiUpdateTasks();
 
         if (tasks.containsKey(player.getUniqueId())) {
-            String closedTitle = event.getView().getTitle();
-            String dailyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.daily_quests_menu.title"));
-            String weeklyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.weekly_quests_menu.title"));
-            String monthlyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.monthly_quests_menu.title"));
-
-            if (closedTitle.equals(dailyMenuTitle) || closedTitle.equals(weeklyMenuTitle) || closedTitle.equals(monthlyMenuTitle)) {
-                tasks.get(player.getUniqueId()).cancel();
-                tasks.remove(player.getUniqueId());
-            }
+            tasks.get(player.getUniqueId()).cancel();
+            tasks.remove(player.getUniqueId());
         }
     }
 
@@ -290,37 +295,10 @@ public class GUI implements Listener {
 
         if (clickedItem.getType() == Material.EMERALD) {
             handleBuyQuest(player, category);
-        } else if (clickedItem.getType() == Material.WRITABLE_BOOK) {
-            handleGetFreeQuest(player, category);
         }
-    }
-
-    private void handleGetFreeQuest(Player player, QuestType.Category category) {
-        player.closeInventory();
-        PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
-
-        if (playerData.getMainQuest(category) != null || playerData.isOnCooldown(category)) {
-            player.sendMessage(Utils.colorize("&cJuż odebrałeś darmową misję lub jest ona w trakcie odnowienia."));
-            return;
-        }
-
-        List<String> activeQuestIds = playerData.getActiveQuestsForCategory(category).stream()
-                .map(PlayerProgress::getQuestId)
-                .collect(Collectors.toList());
-
-        Quest newQuest = plugin.getQuestManager().getRandomQuest(category, activeQuestIds);
-        if (newQuest == null) {
-            player.sendMessage(Utils.colorize("&cNie znaleziono żadnych dostępnych misji w tej kategorii."));
-            return;
-        }
-        PlayerProgress progress = playerData.setMainQuest(category, newQuest.getId());
-        setInitialStatistic(player, newQuest, progress);
-        player.sendMessage(Utils.getMessage("new_quest_assigned").replace("%quest_name%", Utils.colorize(newQuest.getName())));
-        openCategoryMenu(player, category);
     }
 
     private void handleBuyQuest(Player player, QuestType.Category category) {
-        // Zamykanie GUI nie jest już potrzebne, bo po zakupie się odświeży
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
 
         if (!playerData.canBuyQuest(category)) {
@@ -337,7 +315,6 @@ public class GUI implements Listener {
 
             if (newQuest == null) {
                 player.sendMessage(Utils.colorize("&cNie ma więcej dostępnych unikalnych misji do kupienia w tej kategorii."));
-                // Zwróć koszt graczowi, jeśli to możliwe
                 plugin.getEconomyManager().giveCost(player, category);
                 return;
             }
@@ -346,7 +323,6 @@ public class GUI implements Listener {
             playerData.incrementQuestsBought(category);
 
             player.sendMessage(Utils.getMessage("buy_quest_success"));
-            // Nie zamykamy, pozwalamy na odświeżenie GUI
             updateCategoryMenuItems(player.getOpenInventory().getTopInventory(), player, category);
         }
     }
@@ -356,25 +332,52 @@ public class GUI implements Listener {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
+        PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
+        if (playerData == null) return;
+
         QuestType.Category category = null;
         if (clickedItem.getType() == Material.CLOCK) category = QuestType.Category.DAILY;
         else if (clickedItem.getType() == Material.COMPASS) category = QuestType.Category.WEEKLY;
         else if (clickedItem.getType() == Material.BEACON) category = QuestType.Category.MONTHLY;
 
         if (category != null) {
-            openCategoryMenu(player, category);
+            if (playerData.getMainQuest(category) == null && !playerData.isOnCooldown(category)) {
+                player.closeInventory();
+
+                List<String> activeQuestIds = playerData.getActiveQuestsForCategory(category).stream()
+                        .map(PlayerProgress::getQuestId)
+                        .collect(Collectors.toList());
+
+                Quest newQuest = plugin.getQuestManager().getRandomQuest(category, activeQuestIds);
+                if (newQuest == null) {
+                    player.sendMessage(Utils.colorize("&cNie znaleziono żadnych dostępnych misji w tej kategorii."));
+                    return;
+                }
+                PlayerProgress progress = playerData.setMainQuest(category, newQuest.getId());
+                setInitialStatistic(player, newQuest, progress);
+                player.sendMessage(Utils.getMessage("new_quest_assigned").replace("%quest_name%", Utils.colorize(newQuest.getName())));
+                openCategoryMenu(player, category);
+            } else {
+                openCategoryMenu(player, category);
+            }
         }
     }
 
-    private void checkAndRemoveExpiredQuests(PlayerData playerData) {
+    private void checkAndRemoveExpiredQuests(Player player) {
+        PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
+        if (playerData == null) return;
+
         for (QuestType.Category category : QuestType.Category.values()) {
             long timeLimitSeconds = plugin.getConfig().getLong("time_limits." + category.name().toLowerCase());
             long timeLimitMillis = TimeUnit.SECONDS.toMillis(timeLimitSeconds);
 
-            // Używamy kopii listy, aby uniknąć ConcurrentModificationException
             new ArrayList<>(playerData.getActiveQuestsForCategory(category)).forEach(progress -> {
                 long remainingMillis = (progress.getStartTime() + timeLimitMillis) - System.currentTimeMillis();
                 if (remainingMillis <= 0) {
+                    Quest quest = plugin.getQuestManager().getQuestById(progress.getQuestId());
+                    if(quest != null) {
+                        player.sendMessage(Utils.getMessage("quest_expired").replace("%quest_name%", Utils.colorize(quest.getName())));
+                    }
                     playerData.removeQuest(category, progress);
                 }
             });

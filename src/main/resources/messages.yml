@@ -1,6 +1,3 @@
-# Plik z wiadomościami pluginu. Możesz edytować każdą wiadomość.
-# Używaj kodów kolorów z '&'. Wiadomości nie mają już automatycznego prefixu.
-
 # Ogólne
 no_permission: "&cNie masz uprawnień do użycia tej komendy."
 player_only_command: "&cTa komenda może być wykonana tylko przez gracza."
@@ -8,7 +5,7 @@ reload_success: "&aKonfiguracja pluginu została przeładowana."
 
 # Misje
 new_quest_assigned: "&aOtrzymałeś nową misję: &e%quest_name%&a!"
-quest_completed: "&aGratulacje! Ukończyłeś misję &e%quest_name%&a i otrzymałeś nagrody!"
+quest_completed: "&aGratulacje! Ukńczyłeś misję &e%quest_name%&a i otrzymałeś nagrody!"
 quest_progress: "&7Postęp: &e%progress%&7/&e%goal%"
 quest_time_left: "&7Pozostały czas: &e%time%"
 on_cooldown: "&cMożesz wylosować nową misję za: &e%time%"
@@ -16,6 +13,7 @@ buy_quest_success: "&aPomyślnie zakupiono nową misję!"
 not_enough_money: "&cNie masz wystarczająco pieniędzy. Wymagane: &e%cost%$"
 not_enough_items: "&cNie masz wszystkich wymaganych przedmiotów."
 buy_limit_reached: "&cOsiągnąłeś dzienny limit zakupu dodatkowych misji."
+quest_expired: "&cTwoja misja &e%quest_name% &cprzedawniła się!"
 
 # Resetowanie
 reset_usage: "&cPoprawne użycie: /venquests reset <gracz> <daily|weekly|monthly|all>"
@@ -24,5 +22,4 @@ reset_success: "&aPomyślnie zresetowano misje (%type%) dla gracza %player%."
 
 # Wewnętrzne (np. dla lore w GUI)
 cooldown_ready_placeholder: "&aGotowe!"
-no_quest_placeholder: "&7Brak"
-
+no_quest_placeholder: "&cERROR &4404"
