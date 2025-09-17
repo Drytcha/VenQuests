@@ -36,7 +36,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 player.sendMessage(Utils.getMessage("no_permission"));
                 return true;
             }
-            // Sprawdzamy, czy dane gracza są już załadowane
             if (plugin.getPlayerManager().getPlayerData(player.getUniqueId()) == null) {
                 player.sendMessage(Utils.colorize("&cTwoje dane są wciąż wczytywane. Wyjdź i wejdź na serwer."));
                 return true;
@@ -54,6 +53,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Utils.colorize("&6VenQuests &7- Dostępne komendy:"));
                 sender.sendMessage(Utils.colorize("&e/vq reload &8- &7Przeładowuje konfigurację."));
                 sender.sendMessage(Utils.colorize("&e/vq reset <gracz> <typ> &8- &7Resetuje misje gracza."));
+                sender.sendMessage(Utils.colorize("&e/vq list [gracz] &8- &7Pokazuje listę wszystkich misji."));
                 return true;
             }
 
@@ -62,6 +62,25 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 Utils.loadMessages(plugin);
                 plugin.getQuestManager().loadQuests();
                 sender.sendMessage(Utils.getMessage("reload_success"));
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("list")) {
+                if (args.length == 1) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Utils.getMessage("player_only_command"));
+                        return true;
+                    }
+                    plugin.getGui().openQuestListMenu((Player) sender);
+                } else {
+                    Player target = Bukkit.getPlayer(args[1]);
+                    if (target == null) {
+                        sender.sendMessage(Utils.getMessage("player_not_found").replace("%player%", args[1]));
+                        return true;
+                    }
+                    plugin.getGui().openQuestListMenu(target);
+                    sender.sendMessage(Utils.colorize("&aOtworzono listę misji dla gracza " + target.getName()));
+                }
                 return true;
             }
 
@@ -95,7 +114,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 completions.add("reload");
                 completions.add("reset");
-            } else if (args.length == 2 && args[0].equalsIgnoreCase("reset")) {
+                completions.add("list");
+            } else if (args.length == 2 && (args[0].equalsIgnoreCase("reset") || args[0].equalsIgnoreCase("list"))) {
                 completions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
             } else if (args.length == 3 && args[0].equalsIgnoreCase("reset")) {
                 completions.addAll(Arrays.asList("daily", "weekly", "monthly", "all"));
@@ -104,4 +124,3 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         return completions.stream().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
     }
 }
-

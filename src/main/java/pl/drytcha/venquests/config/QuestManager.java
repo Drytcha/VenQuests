@@ -7,6 +7,7 @@ import pl.drytcha.venquests.VenQuests;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,10 +88,15 @@ public class QuestManager {
         return availableQuests.get(0);
     }
 
-    public List<Quest> getQuestsByCategory(QuestType.Category category) {
-        return quests.values().stream()
+    public List<Quest> getQuestsByCategory(QuestType.Category category, boolean sorted) {
+        List<Quest> filteredQuests = quests.values().stream()
                 .filter(q -> q.getCategory() == category)
                 .collect(Collectors.toList());
+
+        if (sorted) {
+            filteredQuests.sort(Comparator.comparing(q -> q.getType().name()));
+        }
+
+        return filteredQuests;
     }
 }
-

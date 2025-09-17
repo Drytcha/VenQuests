@@ -23,6 +23,8 @@ import pl.drytcha.venquests.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +34,19 @@ import java.util.stream.Collectors;
 public class GUI implements Listener {
 
     private final VenQuests plugin;
+
+    // Stany dla menu listy misji
+    private final Map<UUID, QuestType.Category> playerViewingCategory = new HashMap<>();
+    private final Map<UUID, Integer> playerViewingPage = new HashMap<>();
+    private final Map<UUID, SortType> playerSortType = new HashMap<>();
+
+    private static final int QUESTS_PER_PAGE = 45;
+
+    private enum SortType {
+        NONE,
+        BY_TYPE
+    }
+
 
     public GUI(VenQuests plugin) {
         this.plugin = plugin;
@@ -164,7 +179,85 @@ public class GUI implements Listener {
         tasks.put(player.getUniqueId(), task);
     }
 
-    // METODA AKTUALIZUJĄCA ITEMY W GUI
+    // MENU Z LISTĄ WSZYSTKICH MISJI Z PAGINACJĄ
+    public void openQuestListMenu(Player player) {
+        String title = Utils.colorize(plugin.getConfig().getString("gui.quest_list_menu.title"));
+        int size = plugin.getConfig().getInt("gui.quest_list_menu.size", 54);
+        Inventory inv = Bukkit.createInventory(player, size, title);
+
+        playerViewingCategory.put(player.getUniqueId(), QuestType.Category.DAILY);
+        playerViewingPage.put(player.getUniqueId(), 0);
+        playerSortType.put(player.getUniqueId(), SortType.NONE);
+
+        drawQuestListPage(player, QuestType.Category.DAILY, 0, SortType.NONE, inv);
+
+        player.openInventory(inv);
+    }
+
+    private void drawQuestListPage(Player player, QuestType.Category category, int page, SortType sortType, Inventory inv) {
+        inv.clear();
+
+        List<Quest> quests = plugin.getQuestManager().getQuestsByCategory(category, sortType == SortType.BY_TYPE);
+
+        // Wypełnianie misjami (górne 5 rzędów)
+        int startIndex = page * QUESTS_PER_PAGE;
+        for (int i = 0; i < QUESTS_PER_PAGE; i++) {
+            int questIndex = startIndex + i;
+            if (questIndex < quests.size()) {
+                Quest quest = quests.get(questIndex);
+                List<String> lore = new ArrayList<>(Utils.colorize(quest.getLore()));
+                lore.add("");
+                lore.add(Utils.colorize("&7Typ: &f" + quest.getType().name()));
+                lore.add(Utils.colorize("&8ID: " + quest.getId()));
+                inv.setItem(i, createGuiItem(getIconForQuest(quest), quest.getName(), lore));
+            } else {
+                break; // Nie ma więcej misji do wyświetlenia na tej stronie
+            }
+        }
+
+        // Rysowanie panelu nawigacyjnego (dolny rząd)
+        ItemStack filler = createGuiItem(Material.BLACK_STAINED_GLASS_PANE, " ");
+        for (int i = 45; i < 54; i++) {
+            inv.setItem(i, filler);
+        }
+
+        // Przycisk "Poprzednia strona"
+        if (page > 0) {
+            inv.setItem(45, createGuiItem(Material.ARROW, "&c&lPoprzednia strona", "&7Kliknij, aby wrócić."));
+        }
+
+        // Przycisk "Następna strona"
+        int totalPages = (int) Math.ceil((double) quests.size() / QUESTS_PER_PAGE);
+        if (page < totalPages - 1) {
+            inv.setItem(53, createGuiItem(Material.ARROW, "&a&lNastępna strona", "&7Kliknij, aby przejść dalej."));
+        }
+
+        // Przycisk sortowania
+        if(sortType == SortType.NONE) {
+            inv.setItem(48, createGuiItem(Material.HOPPER, "&6&lSortowanie", "&7Aktualnie: &fDomyślne", "", "&aKliknij, aby posortować wg typu."));
+        } else {
+            inv.setItem(48, createGuiItem(Material.HOPPER, "&6&lSortowanie", "&7Aktualnie: &fWg typu", "", "&aKliknij, aby przywrócić domyślne."));
+        }
+
+        // Przełącznik kategorii
+        ItemStack categorySwitcher;
+        switch(category) {
+            case DAILY:
+                categorySwitcher = createGuiItem(Material.CLOCK, "&e&lMisje Dzienne", "&7Aktualnie przeglądasz misje dzienne.", "", "&aKliknij, aby przełączyć na Tygodniowe.");
+                break;
+            case WEEKLY:
+                categorySwitcher = createGuiItem(Material.COMPASS, "&b&lMisje Tygodniowe", "&7Aktualnie przeglądasz misje tygodniowe.", "", "&aKliknij, aby przełączyć na Miesięczne.");
+                break;
+            case MONTHLY:
+            default:
+                categorySwitcher = createGuiItem(Material.BEACON, "&c&lMisje Miesięczne", "&7Aktualnie przeglądasz misje miesięczne.", "", "&aKliknij, aby przełączyć na Dzienne.");
+                break;
+        }
+        inv.setItem(49, categorySwitcher);
+    }
+
+
+    // METODA AKTUALIZUJĄCA ITEMY W GUI AKTYWNYCH MISJI
     public void updateCategoryMenuItems(Inventory inv, Player player, QuestType.Category category) {
         String configPath = category.name().toLowerCase();
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
@@ -216,7 +309,7 @@ public class GUI implements Listener {
 
                 lore.add(Utils.getMessage("quest_time_left").replace("%time%", Utils.formatTime(remainingMillis)));
 
-                inv.setItem(i, createGuiItem(Material.BOOK, quest.getName(), lore));
+                inv.setItem(i, createGuiItem(getIconForQuest(quest), quest.getName(), lore));
             }
         }
 
@@ -252,12 +345,18 @@ public class GUI implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
 
+        String clickedInventoryTitle = event.getView().getTitle();
+
         String mainMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.main_menu.title"));
         String dailyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.daily_quests_menu.title"));
         String weeklyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.weekly_quests_menu.title"));
         String monthlyMenuTitle = Utils.colorize(plugin.getConfig().getString("gui.monthly_quests_menu.title"));
+        String questListTitle = Utils.colorize(plugin.getConfig().getString("gui.quest_list_menu.title"));
 
-        String clickedInventoryTitle = event.getView().getTitle();
+        if (clickedInventoryTitle.equals(questListTitle)) {
+            handleQuestListClick(event, player);
+            return;
+        }
 
         if (clickedInventoryTitle.equals(mainMenuTitle)) {
             handleMainMenuClick(event, player);
@@ -272,13 +371,61 @@ public class GUI implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
         Player player = (Player) event.getPlayer();
-        Map<UUID, BukkitTask> tasks = plugin.getGuiUpdateTasks();
+        UUID playerUUID = player.getUniqueId();
 
-        if (tasks.containsKey(player.getUniqueId())) {
-            tasks.get(player.getUniqueId()).cancel();
-            tasks.remove(player.getUniqueId());
+        // Czyszczenie stanu gracza z menu listy misji
+        playerViewingCategory.remove(playerUUID);
+        playerViewingPage.remove(playerUUID);
+        playerSortType.remove(playerUUID);
+
+        // Anulowanie taska odświeżającego
+        Map<UUID, BukkitTask> tasks = plugin.getGuiUpdateTasks();
+        if (tasks.containsKey(playerUUID)) {
+            tasks.get(playerUUID).cancel();
+            tasks.remove(playerUUID);
         }
     }
+
+    private void handleQuestListClick(InventoryClickEvent event, Player player) {
+        event.setCancelled(true);
+        ItemStack clickedItem = event.getCurrentItem();
+        if (clickedItem == null || clickedItem.getType().isAir()) return;
+
+        UUID playerUUID = player.getUniqueId();
+        int currentPage = playerViewingPage.getOrDefault(playerUUID, 0);
+        QuestType.Category currentCategory = playerViewingCategory.getOrDefault(playerUUID, QuestType.Category.DAILY);
+        SortType currentSort = playerSortType.getOrDefault(playerUUID, SortType.NONE);
+        int slot = event.getSlot();
+
+        if (slot == 45 && currentPage > 0) { // Poprzednia strona
+            playerViewingPage.put(playerUUID, currentPage - 1);
+            drawQuestListPage(player, currentCategory, currentPage - 1, currentSort, event.getInventory());
+        } else if (slot == 53) { // Następna strona
+            List<Quest> quests = plugin.getQuestManager().getQuestsByCategory(currentCategory, currentSort == SortType.BY_TYPE);
+            int totalPages = (int) Math.ceil((double) quests.size() / QUESTS_PER_PAGE);
+            if (currentPage < totalPages - 1) {
+                playerViewingPage.put(playerUUID, currentPage + 1);
+                drawQuestListPage(player, currentCategory, currentPage + 1, currentSort, event.getInventory());
+            }
+        } else if (slot == 48) { // Zmiana sortowania
+            SortType nextSort = (currentSort == SortType.NONE) ? SortType.BY_TYPE : SortType.NONE;
+            playerSortType.put(playerUUID, nextSort);
+            playerViewingPage.put(playerUUID, 0); // Reset do pierwszej strony
+            drawQuestListPage(player, currentCategory, 0, nextSort, event.getInventory());
+        } else if (slot == 49) { // Zmiana kategorii
+            QuestType.Category nextCategory;
+            switch(currentCategory) {
+                case DAILY: nextCategory = QuestType.Category.WEEKLY; break;
+                case WEEKLY: nextCategory = QuestType.Category.MONTHLY; break;
+                case MONTHLY:
+                default: nextCategory = QuestType.Category.DAILY; break;
+            }
+            playerViewingCategory.put(playerUUID, nextCategory);
+            playerViewingPage.put(playerUUID, 0); // Reset do pierwszej strony
+            drawQuestListPage(player, nextCategory, 0, currentSort, event.getInventory());
+        }
+    }
+
 
     private void handleCategoryMenuClick(InventoryClickEvent event, Player player) {
         event.setCancelled(true);
@@ -374,10 +521,6 @@ public class GUI implements Listener {
             new ArrayList<>(playerData.getActiveQuestsForCategory(category)).forEach(progress -> {
                 long remainingMillis = (progress.getStartTime() + timeLimitMillis) - System.currentTimeMillis();
                 if (remainingMillis <= 0) {
-                    Quest quest = plugin.getQuestManager().getQuestById(progress.getQuestId());
-                    if(quest != null) {
-                        player.sendMessage(Utils.getMessage("quest_expired").replace("%quest_name%", Utils.colorize(quest.getName())));
-                    }
                     playerData.removeQuest(category, progress);
                 }
             });
@@ -409,6 +552,19 @@ public class GUI implements Listener {
                 player.getStatistic(Statistic.SPRINT_ONE_CM);
     }
 
+    private Material getIconForQuest(Quest quest) {
+        String materialName = plugin.getConfig().getString("quest_type_icons." + quest.getType().name());
+        if (materialName == null) {
+            materialName = plugin.getConfig().getString("quest_type_icons.DEFAULT", "BOOK");
+        }
+        try {
+            return Material.valueOf(materialName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Nieprawidłowa nazwa materiału w config.yml dla typu misji: " + quest.getType().name() + ". Użyto domyślnej ikony.");
+            return Material.valueOf(plugin.getConfig().getString("quest_type_icons.DEFAULT", "BOOK"));
+        }
+    }
+
 
     private ItemStack createGuiItem(Material material, String name, List<String> lore) {
         ItemStack item = new ItemStack(material, 1);
@@ -429,4 +585,3 @@ public class GUI implements Listener {
         return createGuiItem(material, name, Arrays.asList(lore));
     }
 }
-

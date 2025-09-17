@@ -2,13 +2,17 @@ package pl.drytcha.venquests.database;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import pl.drytcha.venquests.VenQuests;
 import pl.drytcha.venquests.player.PlayerData;
+import pl.drytcha.venquests.utils.Utils;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SQLiteManager implements DatabaseManager {
@@ -141,8 +145,16 @@ public class SQLiteManager implements DatabaseManager {
 
     @Override
     public void resetPlayerData(UUID uuid, String type) {
-        PlayerData data = loadPlayerData(uuid);
-        switch (type) {
+        // Krok 1: Spróbuj pobrać dane z pamięci podręcznej (dla graczy online)
+        PlayerData data = plugin.getPlayerManager().getPlayerData(uuid);
+
+        if (data == null) {
+            // Krok 2: Jeśli gracz jest offline, wczytaj dane z bazy danych
+            data = loadPlayerData(uuid);
+        }
+
+        // Krok 3: Zastosuj logikę resetowania
+        switch (type.toLowerCase()) {
             case "daily":
                 data.setDailyQuest(null);
                 data.setDailyCooldown(0);
@@ -174,7 +186,25 @@ public class SQLiteManager implements DatabaseManager {
                 if (data.getAdditionalMonthlyQuests() != null) data.getAdditionalMonthlyQuests().clear();
                 break;
         }
+
+        // Krok 4: Zapisz zmienione dane z powrotem do bazy danych
         savePlayerData(data);
+
+        // Krok 5: Jeśli gracz jest online, poinformuj go i zamknij GUI, aby wymusić odświeżenie
+        Player onlinePlayer = Bukkit.getPlayer(uuid);
+        if (onlinePlayer != null && onlinePlayer.isOnline()) {
+            onlinePlayer.sendMessage(Utils.getMessage("quests_reset_by_admin").replace("%type%", type));
+            // Sprawdzamy, czy gracz ma otwarte którekolwiek z naszych GUI
+            String currentTitle = onlinePlayer.getOpenInventory().getTitle();
+            List<String> guiTitles = new ArrayList<>();
+            guiTitles.add(Utils.colorize(plugin.getConfig().getString("gui.main_menu.title")));
+            guiTitles.add(Utils.colorize(plugin.getConfig().getString("gui.daily_quests_menu.title")));
+            guiTitles.add(Utils.colorize(plugin.getConfig().getString("gui.weekly_quests_menu.title")));
+            guiTitles.add(Utils.colorize(plugin.getConfig().getString("gui.monthly_quests_menu.title")));
+            if(guiTitles.contains(currentTitle)){
+                onlinePlayer.closeInventory();
+            }
+        }
     }
 }
 

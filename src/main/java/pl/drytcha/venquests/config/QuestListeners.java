@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -64,13 +65,20 @@ public class QuestListeners implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(PlayerFishEvent event) {
-        if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-            if (event.getCaught() instanceof org.bukkit.entity.Item) {
-                ItemStack caught = ((org.bukkit.entity.Item) event.getCaught()).getItemStack();
-                String itemType = caught.getType().name().toUpperCase();
-                checkAndUpdateProgress(event.getPlayer(), QuestType.FISHING, itemType, caught.getAmount());
-            }
+        // Sprawdzamy tylko zakończony połów, w którym coś zostało złowione
+        if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH || !(event.getCaught() instanceof org.bukkit.entity.Item)) {
+            return;
         }
+
+        Player player = event.getPlayer();
+        // Złowiona rzecz jest zawsze bytem typu Item, w którym jest ItemStack
+        ItemStack caughtItemStack = ((org.bukkit.entity.Item) event.getCaught()).getItemStack();
+        // Pobieramy nazwę materiału (np. "COD", "SALMON", "SADDLE")
+        String caughtItemName = caughtItemStack.getType().name();
+        int amount = caughtItemStack.getAmount();
+
+        // Nazwa z .name() jest już wielkimi literami, więc przekazujemy ją bezpośrednio
+        checkAndUpdateProgress(player, QuestType.FISHING, caughtItemName, amount);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
