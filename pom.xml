@@ -67,6 +67,10 @@
             <id>sqlite-jdbc</id>
             <url>https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc</url>
         </repository>
+        <repository>
+            <id>itemsadder-repo</id>
+            <url>https://mvnrepository.com/artifact/com.github.LoneDev6/api-itemsadder</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -86,7 +90,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.1.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -98,6 +102,13 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.50.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.LoneDev6</groupId>
+            <artifactId>api-itemsadder</artifactId>
+            <version>3.4.1-r4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

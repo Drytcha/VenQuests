@@ -1,7 +1,7 @@
 package pl.drytcha.venquests.player;
 
 import pl.drytcha.venquests.VenQuests;
-import pl.drytcha.venquests.config.QuestType;
+import pl.drytcha.venquests.quests.QuestType;
 import pl.drytcha.venquests.database.PlayerProgress;
 
 import java.util.ArrayList;

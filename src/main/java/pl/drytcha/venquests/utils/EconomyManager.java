@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.drytcha.venquests.VenQuests;
-import pl.drytcha.venquests.config.QuestType;
+import pl.drytcha.venquests.quests.QuestType;
 
 import java.util.HashMap;
 import java.util.List;

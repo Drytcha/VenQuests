@@ -37,7 +37,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (plugin.getPlayerManager().getPlayerData(player.getUniqueId()) == null) {
-                player.sendMessage(Utils.colorize("&cTwoje dane są wciąż wczytywane. Wyjdź i wejdź na serwer."));
+                player.sendMessage(Utils.colorize("&cTwoje dane są wciąż wczytywane. Spróbuj ponownie za chwilę."));
                 return true;
             }
             plugin.getGui().openMainMenu(player);
@@ -54,6 +54,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 sender.sendMessage(Utils.colorize("&e/vq reload &8- &7Przeładowuje konfigurację."));
                 sender.sendMessage(Utils.colorize("&e/vq reset <gracz> <typ> &8- &7Resetuje misje gracza."));
                 sender.sendMessage(Utils.colorize("&e/vq list [gracz] &8- &7Pokazuje listę wszystkich misji."));
+                sender.sendMessage(Utils.colorize("&e/vq getrod [gracz] &8- &7Otrzymuje specjalną wędkę."));
                 return true;
             }
 
@@ -61,7 +62,31 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 plugin.reloadConfig();
                 Utils.loadMessages(plugin);
                 plugin.getQuestManager().loadQuests();
+                plugin.getRodManager().loadRodConfig();
+                plugin.getRodManager().loadRod();
+                plugin.getRodManager().loadRewards();
                 sender.sendMessage(Utils.getMessage("reload_success"));
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("getrod")) {
+                if (args.length >= 2) {
+                    Player target = Bukkit.getPlayer(args[1]);
+                    if (target == null) {
+                        sender.sendMessage(Utils.getMessage("player_not_found").replace("%player%", args[1]));
+                        return true;
+                    }
+                    target.getInventory().addItem(plugin.getRodManager().getSpecialRod());
+                    sender.sendMessage(Utils.colorize("&aPomyślnie nadano wędkę graczowi " + target.getName()));
+                } else {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Utils.getMessage("player_only_command"));
+                        return true;
+                    }
+                    Player player = (Player) sender;
+                    player.getInventory().addItem(plugin.getRodManager().getSpecialRod());
+                    sender.sendMessage(Utils.colorize("&aOtrzymałeś specjalną wędkę."));
+                }
                 return true;
             }
 
@@ -112,11 +137,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
         if (command.getName().equalsIgnoreCase("venquests") && sender.hasPermission("venquests.admin")) {
             if (args.length == 1) {
-                completions.add("reload");
-                completions.add("reset");
-                completions.add("list");
-            } else if (args.length == 2 && (args[0].equalsIgnoreCase("reset") || args[0].equalsIgnoreCase("list"))) {
-                completions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
+                completions.addAll(Arrays.asList("reload", "reset", "list", "getrod"));
+            } else if (args.length == 2) {
+                if (args[0].equalsIgnoreCase("reset") || args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("getrod")) {
+                    completions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
+                }
             } else if (args.length == 3 && args[0].equalsIgnoreCase("reset")) {
                 completions.addAll(Arrays.asList("daily", "weekly", "monthly", "all"));
             }
@@ -124,3 +149,4 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         return completions.stream().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
     }
 }
+

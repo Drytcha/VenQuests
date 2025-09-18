@@ -1,4 +1,4 @@
-package pl.drytcha.venquests.config;
+package pl.drytcha.venquests.quests;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

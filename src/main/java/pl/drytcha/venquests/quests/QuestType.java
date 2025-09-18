@@ -1,4 +1,4 @@
-package pl.drytcha.venquests.config;
+package pl.drytcha.venquests.quests;
 
 public enum QuestType {
     MOBS,

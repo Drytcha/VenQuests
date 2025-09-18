@@ -1,0 +1,45 @@
+# Konfiguracja specjalnej wędki
+rod:
+  # Opcjonalne: Jeśli używasz ItemsAdder, wpisz tutaj ID swojego itemu.
+  itemsadder-id: ""
+  name: "&bMagiczna Wędka"
+  lore:
+    - "&7Zarzuć, aby złowić skarby!"
+    - "&eSzansa na potrójny połów!"
+
+settings:
+  # Czas w sekundach, po jakim spławiki znikną i gracz otrzyma nagrody.
+  duration: 10
+  # Maksymalna odległość w kratkach od miejsca zarzucenia wędki.
+  max-distance: 30
+
+# Pula wszystkich możliwych nagród.
+# Przy każdym udanym połowie losowane są 3 nagrody z tej puli.
+# 'weight' (waga) - im wyższa wartość, tym większa szansa na wylosowanie danej nagrody
+# w porównaniu do innych. Działa to niezależnie dla każdego z 3 losowań.
+rewards:
+  - type: item
+    content: "DIAMOND:1"
+    weight: 10
+    message: "&aZłowiłeś &bdiament&a!"
+  - type: item
+    content: "GOLDEN_APPLE:1"
+    weight: 5
+    message: "&6Niesamowite! Złowiłeś złote jabłko!"
+  - type: item
+    content: "COD:5"
+    weight: 75
+    message: "&7Złowiłeś kilka ryb."
+  - type: command
+    content: "eco give %player% 100"
+    weight: 50
+    message: "&aZłowiłeś &e100$&a!"
+  - type: command
+    content: "crate give %player% magiczny_klucz 1"
+    weight: 2
+    message: "&6Niesamowite! Złowiłeś &eMagiczny Klucz&6!"
+  - type: item # Reprezentuje "pusty" drop
+    content: "" # Pusta zawartość oznacza brak przedmiotu
+    weight: 100
+    message: "&7Nic nie złowiłeś... Może następnym razem!"
+

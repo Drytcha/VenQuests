@@ -14,8 +14,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import pl.drytcha.venquests.VenQuests;
-import pl.drytcha.venquests.config.Quest;
-import pl.drytcha.venquests.config.QuestType;
+import pl.drytcha.venquests.quests.Quest;
+import pl.drytcha.venquests.quests.QuestType;
 import pl.drytcha.venquests.database.PlayerProgress;
 import pl.drytcha.venquests.player.PlayerData;
 import pl.drytcha.venquests.utils.InventoryUtils;
@@ -23,7 +23,6 @@ import pl.drytcha.venquests.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

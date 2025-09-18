@@ -19,6 +19,8 @@ reset_usage: "&cPoprawne użycie: /venquests reset <gracz> <daily|weekly|monthly
 player_not_found: "&cNie znaleziono gracza o nicku %player%."
 reset_success: "&aPomyślnie zresetowano misje (%type%) dla gracza %player%."
 
+fishing_cancelled_moved_too_far: "&cOddaliłeś/aś się zbyt daleko. Anulowano łowienie."
+
 # Wewnętrzne (np. dla lore w GUI)
 cooldown_ready_placeholder: "&aGotowe!"
 no_quest_placeholder: "&7Brak"
