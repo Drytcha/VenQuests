@@ -18,6 +18,7 @@ import pl.drytcha.venquests.player.PlayerManager;
 import pl.drytcha.venquests.utils.EconomyManager;
 import pl.drytcha.venquests.utils.Utils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -42,12 +43,7 @@ public final class VenQuests extends JavaPlugin {
         instance = this;
 
         // Zapisywanie domyślnych plików konfiguracyjnych
-        saveDefaultConfig();
-        saveResource("messages.yml", false);
-        saveResource("quests_daily.yml", false);
-        saveResource("quests_weekly.yml", false);
-        saveResource("quests_monthly.yml", false);
-        saveResource("wedka.yml", false);
+        saveDefaultConfigFiles();
         Utils.loadMessages(this);
 
         // Inicjalizacja managerów
@@ -97,7 +93,21 @@ public final class VenQuests extends JavaPlugin {
         }
         getLogger().info("Plugin VenQuests został wyłączony.");
     }
+    private void saveDefaultConfigFiles() {
+        saveDefaultConfig();
+        saveDefaultConfigFile("messages.yml");
+        saveDefaultConfigFile("quests_daily.yml");
+        saveDefaultConfigFile("quests_weekly.yml");
+        saveDefaultConfigFile("quests_monthly.yml");
+        saveDefaultConfigFile("wedka.yml");
+    }
 
+    private void saveDefaultConfigFile(String fileName) {
+        File file = new File(getDataFolder(), fileName);
+        if (!file.exists()) {
+            saveResource(fileName, false);
+        }
+    }
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
