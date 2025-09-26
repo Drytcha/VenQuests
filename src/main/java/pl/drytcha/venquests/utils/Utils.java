@@ -7,11 +7,14 @@ import pl.drytcha.venquests.VenQuests;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Utils {
 
     private static FileConfiguration messagesConfig;
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
     public static void loadMessages(VenQuests plugin) {
         File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
@@ -31,6 +34,21 @@ public class Utils {
 
     public static String colorize(String message) {
         if (message == null) return "";
+
+        // Ręczna konwersja formatu &#RRGGBB na format zrozumiały dla Spigota (&x&R&R&G&G&B&B)
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        while (matcher.find()) {
+            String hexCode = matcher.group(1);
+            StringBuilder bukkitHex = new StringBuilder("&x");
+            for (char c : hexCode.toCharArray()) {
+                bukkitHex.append('&').append(c);
+            }
+            message = message.replace(matcher.group(), bukkitHex.toString());
+            // Zresetuj matcher, aby znaleźć kolejne wystąpienia w zmodyfikowanym stringu
+            matcher = HEX_PATTERN.matcher(message);
+        }
+
+        // Translate standard color codes and the newly formatted HEX codes
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 

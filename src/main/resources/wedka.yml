@@ -1,7 +1,7 @@
 # Konfiguracja specjalnej wędki
 rod:
-  # Opcjonalne: Jeśli używasz ItemsAdder, wpisz tutaj ID swojego itemu.
-  itemsadder-id: ""
+  # Opcjonalne: Jeśli używasz ITEMsAdder, wpisz tutaj ID swojego ITEMu.
+  itemsadder-id: "vendeya:fish_rod"
   name: "&bMagiczna Wędka"
   lore:
     - "&7Zarzuć, aby złowić skarby!"
@@ -9,7 +9,7 @@ rod:
 
 settings:
   # Czas w sekundach, po jakim spławiki znikną i gracz otrzyma nagrody.
-  duration: 10
+  duration: 15
   # Maksymalna odległość w kratkach od miejsca zarzucenia wędki.
   max-distance: 30
 
@@ -18,28 +18,182 @@ settings:
 # 'weight' (waga) - im wyższa wartość, tym większa szansa na wylosowanie danej nagrody
 # w porównaniu do innych. Działa to niezależnie dla każdego z 3 losowań.
 rewards:
-  - type: item
-    content: "DIAMOND:1"
-    weight: 10
-    message: "&aZłowiłeś &bdiament&a!"
-  - type: item
-    content: "GOLDEN_APPLE:1"
-    weight: 5
-    message: "&6Niesamowite! Złowiłeś złote jabłko!"
-  - type: item
-    content: "COD:5"
-    weight: 75
-    message: "&7Złowiłeś kilka ryb."
-  - type: command
-    content: "eco give %player% 100"
-    weight: 50
-    message: "&aZłowiłeś &e100$&a!"
-  - type: command
-    content: "crate give %player% magiczny_klucz 1"
+  - type: ITEM
+    content: ''
+    amount: 0
+    enchanted: []
+    weight: 80
+    message: "&7Pusty haczyk ;("
+  - type: ITEM
+    content: "COD"
+    amount: 1
+    enchanted: []
+    weight: 60
+    message: "&7Złowiono &aSurowy dorsz&7!"
+  - type: ITEM
+    content: "SALMON"
+    amount: 1
+    enchanted: []
+    weight: 25
+    message: "&7Złowiono &aSurowy łosoś&7!"
+  - type: ITEM
+    content: "TROPICAL_FISH"
+    amount: 1
+    enchanted: []
     weight: 2
-    message: "&6Niesamowite! Złowiłeś &eMagiczny Klucz&6!"
-  - type: item # Reprezentuje "pusty" drop
-    content: "" # Pusta zawartość oznacza brak przedmiotu
-    weight: 100
-    message: "&7Nic nie złowiłeś... Może następnym razem!"
+    message: "&7Złowiono &aRyba tropikalna&7!"
+  - type: ITEM
+    content: "PUFFERFISH"
+    amount: 1
+    enchanted: []
+    weight: 60
+    message: "&7Złowiono &aRozdymka&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:380"
+    amount: 1
+    enchanted: []
+    weight: 12
+    message: "&7Złowiono &aŁuk&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:380"
+    amount: 1
+    enchanted: "unbreaking:1"
+    weight: 10
+    message: "&7Złowiono &aZaczarowany Łuk&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:280"
+    amount: 1
+    enchanted: "unbreaking:2"
+    weight: 8
+    message: "&7Złowiono &aZaczarowany Łuk&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:380"
+    amount: 1
+    enchanted: "power:1"
+    weight: 10
+    message: "&7Złowiono &aZaczarowany Łuk&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:280"
+    amount: 1
+    enchanted: "power:2"
+    weight: 8
+    message: "&7Złowiono &aZaczarowany Łuk&7!"
+  - type: ITEM_DURABILITY
+    content: "BOW"
+    durability: "1:200"
+    amount: 1
+    enchanted: "infinity:1"
+    weight: 6
+    message: "&7Złowiono &aZaczarowany Łuk&7!"
+  - type: ITEM_DURABILITY
+    content: "FISHING_ROD"
+    durability: "1:60"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aWędke&7!"
+  - type: ITEM_DURABILITY
+    content: "FISHING_ROD"
+    durability: "1:30"
+    amount: 1
+    enchanted: "LUCK_OF_THE_SEA:1"
+    weight: 8
+    message: "&7Złowiono &aZaczarowaną Wędke&7!"
+  - type: ITEM_DURABILITY
+    content: "FISHING_ROD"
+    durability: "1:30"
+    amount: 1
+    enchanted: "LUCK_OF_THE_SEA:2"
+    weight: 6
+    message: "&7Złowiono &aZaczarowaną Wędke&7!"
+  - type: ITEM
+    content: "NAMETAG"
+    amount: 1
+    enchanted: []
+    weight: 16
+    message: "&7Złowiono &aZnacznik&7!"
+  - type: ITEM
+    content: "SADDLE"
+    amount: 1
+    enchanted: []
+    weight: 16
+    message: "&7Złowiono &aSiodło&7!"
+  - type: ITEM
+    content: "NAUTILUS_SHELL"
+    amount: 1
+    enchanted: []
+    weight: 16
+    message: "&7Złowiono &aMuszla łodzika&7!"
+  - type: ITEM
+    content: "LILY_PAD"
+    amount: 1
+    enchanted: []
+    weight: 17
+    message: "&7Złowiono &aLilia wodna&7!"
+  - type: ITEM
+    content: "BOWL"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aMiska&7!"
+  - type: ITEM
+    content: "LEATHER"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aSkóra&7!"
+  - type: ITEM_DURABILITY
+    content: "LEATHER_BOOTS"
+    durability: "1:60"
+    amount: 1
+    enchanted: []
+    weight: 6
+    message: "&7Złowiono &aSkórzane buty&7!"
+  - type: ITEM
+    content: "ROTTEN_FLESH"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aZgniłe mięso&7!"
+  - type: ITEM
+    content: "STICK"
+    amount: 1
+    enchanted: []
+    weight: 5
+    message: "&7Złowiono &aPatyk&7!"
+  - type: ITEM
+    content: "STRING"
+    amount: 1
+    enchanted: []
+    weight: 5
+    message: "&7Złowiono &aNić&7!"
+  - type: ITEM
+    content: "WATER_BOTTLE"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aButelka wody&7!"
+  - type: ITEM
+    content: "BONE"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aKość&7!"
+  - type: ITEM
+    content: "INK_SAC"
+    amount: 1
+    enchanted: []
+    weight: 1
+    message: "&7Złowiono &aTorbiel z atramentem&7!"
+  - type: ITEM
+    content: "TRIPWIRE_HOOK"
+    amount: 1
+    enchanted: []
+    weight: 10
+    message: "&7Złowiono &aZaczep na linkę&7!"
 

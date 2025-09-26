@@ -5,16 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import pl.drytcha.venquests.VenQuests;
+import pl.drytcha.venquests.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,11 +63,13 @@ public class RodManager {
 
         ItemMeta meta = specialRod.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', rodConfig.getString("rod.name", "&bMagiczna Wędka")));
+            meta.setDisplayName(Utils.colorize(rodConfig.getString("rod.name", "&bMagiczna Wędka")));
             List<String> lore = rodConfig.getStringList("rod.lore").stream()
-                    .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                    .map(line -> Utils.colorize(line))
                     .collect(Collectors.toList());
             meta.setLore(lore);
+            meta.setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             meta.getPersistentDataContainer().set(specialRodKey, PersistentDataType.BYTE, (byte) 1);
             specialRod.setItemMeta(meta);
         }
@@ -81,14 +85,37 @@ public class RodManager {
                 String typeStr = (String) rewardMap.get("type");
                 Reward.RewardType type = Reward.RewardType.valueOf(typeStr.toUpperCase());
                 String content = (String) rewardMap.get("content");
-                int weight = (int) rewardMap.get("weight");
+                int weight = ((Number) rewardMap.get("weight")).intValue();
                 String message = (String) rewardMap.get("message");
 
-                rewardsPool.add(new Reward(type, content, weight, message));
+                // --- Nowa logika wczytywania ---
+                String amount = "1";
+                if (rewardMap.containsKey("amount")) {
+                    amount = String.valueOf(rewardMap.get("amount"));
+                }
+
+                String durability = "0";
+                if (rewardMap.containsKey("durability")) {
+                    durability = String.valueOf(rewardMap.get("durability"));
+                }
+
+                List<String> enchantments = new ArrayList<>();
+                if (rewardMap.containsKey("enchanted")) {
+                    Object enchObject = rewardMap.get("enchanted");
+                    if (enchObject instanceof String && !((String) enchObject).isEmpty()) {
+                        enchantments.add((String) enchObject);
+                    } else if (enchObject instanceof List) {
+                        enchantments.addAll((List<String>) enchObject);
+                    }
+                }
+                // --- Koniec nowej logiki ---
+
+                rewardsPool.add(new Reward(type, content, weight, message, amount, durability, enchantments));
                 totalWeight += weight;
 
             } catch (Exception e) {
                 plugin.getLogger().warning("[VenQuests] Błąd podczas ładowania nagrody z wedka.yml: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -106,7 +133,7 @@ public class RodManager {
     }
 
     public int getDuration() {
-        return rodConfig.getInt("settings.duration", 10);
+        return rodConfig.getInt("settings.duration", 15);
     }
 
     public double getMaxDistance() {
@@ -121,4 +148,3 @@ public class RodManager {
         return totalWeight;
     }
 }
-

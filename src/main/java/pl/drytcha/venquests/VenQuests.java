@@ -33,6 +33,7 @@ public final class VenQuests extends JavaPlugin {
     private EconomyManager economyManager;
     private GUI gui;
     private RodManager rodManager;
+    private QuestListeners questListeners;
     private Economy vaultEconomy = null;
     private final Map<UUID, BukkitTask> guiUpdateTasks = new HashMap<>();
     private final Map<UUID, FishingRodTask> activeFishingTasks = new HashMap<>();
@@ -129,7 +130,8 @@ public final class VenQuests extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new PlayerEvents(this), this);
-        getServer().getPluginManager().registerEvents(new QuestListeners(this), this);
+        this.questListeners = new QuestListeners(this);
+        getServer().getPluginManager().registerEvents(questListeners, this);
         getServer().getPluginManager().registerEvents(new RodListeners(this, rodManager), this);
         getServer().getPluginManager().registerEvents(gui, this);
     }
@@ -159,6 +161,10 @@ public final class VenQuests extends JavaPlugin {
         return rodManager;
     }
 
+    public QuestListeners getQuestListeners() { // Dodany getter
+        return questListeners;
+    }
+
     public Map<UUID, FishingRodTask> getActiveFishingTasks() {
         return activeFishingTasks;
     }
@@ -171,4 +177,3 @@ public final class VenQuests extends JavaPlugin {
         return guiUpdateTasks;
     }
 }
-

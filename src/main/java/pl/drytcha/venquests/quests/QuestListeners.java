@@ -70,13 +70,25 @@ public class QuestListeners implements Listener {
         }
 
         Player player = event.getPlayer();
-        // Złowiona rzecz jest zawsze bytem typu Item, w którym jest ItemStack
         ItemStack caughtItemStack = ((org.bukkit.entity.Item) event.getCaught()).getItemStack();
-        // Pobieramy nazwę materiału (np. "COD", "SALMON", "SADDLE")
-        String caughtItemName = caughtItemStack.getType().name();
-        int amount = caughtItemStack.getAmount();
 
-        // Nazwa z .name() jest już wielkimi literami, więc przekazujemy ją bezpośrednio
+        // Używamy nowej, publicznej metody do sprawdzania postępu
+        checkFishingProgress(player, caughtItemStack);
+    }
+
+    /**
+     * Sprawdza i aktualizuje postęp misji wędkarskich dla gracza.
+     * Może być wywoływana z dowolnego miejsca w pluginie.
+     *
+     * @param player Gracz, którego postęp jest sprawdzany.
+     * @param caughtItem Przedmiot, który został złowiony.
+     */
+    public void checkFishingProgress(Player player, ItemStack caughtItem) {
+        if (player == null || caughtItem == null) {
+            return;
+        }
+        String caughtItemName = caughtItem.getType().name();
+        int amount = caughtItem.getAmount();
         checkAndUpdateProgress(player, QuestType.FISHING, caughtItemName, amount);
     }
 
@@ -204,7 +216,7 @@ public class QuestListeners implements Listener {
         }
     }
 
-    private void checkAndUpdateProgress(Player player, QuestType type, String target, int amount) {
+    public void checkAndUpdateProgress(Player player, QuestType type, String target, int amount) {
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(player.getUniqueId());
         if (playerData == null) return;
 
